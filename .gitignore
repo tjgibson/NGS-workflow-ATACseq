@@ -5,7 +5,7 @@
 workflow/scripts/.snakemake*
 !workflow/Snakefile
 !config
-!config/sample_template.xlsx
+#!config/units_template.xlsx
 !config/config.yaml
 !config/samples.tsv
 !resources
