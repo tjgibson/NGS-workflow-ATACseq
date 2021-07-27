@@ -8,6 +8,7 @@ workflow/scripts/.snakemake*
 #!config/units_template.xlsx
 !config/config.yaml
 !config/samples.tsv
+!config/units.tsv
 !resources
 !resources/*
 !workflow/envs
