@@ -1,0 +1,28 @@
+# path or URL to sample sheet (TSV format, columns: sample, condition, ...)
+samples: config/samples.tsv
+# path or URL to sequencing unit sheet (TSV format, columns: sample, unit, fq1, fq2)
+# Units are technical replicates (e.g. lanes, or resequencing of the same biological
+# sample).
+units: config/units.tsv
+
+
+ref_genome:
+  name: dm6
+  link: http://ftp.ensembl.org/pub/release-104/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.32.dna.toplevel.fa.gz
+
+use_spikeIn: False
+
+spikeIn_genome:
+  name: GRCh38
+  link: http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
+
+
+mergeReads:
+  activate: True
+
+
+
+params:
+  cutadapt-pe: ""
+  cutadapt-se: ""
+  star: ""

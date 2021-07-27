@@ -4,9 +4,10 @@
 !workflow/scripts/*
 workflow/scripts/.snakemake*
 !workflow/Snakefile
-!config/*
-#!config/config.yaml
-#!samples.tsv
+!config
+!config/sample_template.xlsx
+!config/config.yaml
+!config/samples.tsv
 !resources
 !resources/*
 !workflow/envs
