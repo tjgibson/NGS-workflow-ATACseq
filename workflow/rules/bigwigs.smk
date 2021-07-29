@@ -5,7 +5,7 @@ rule make_bigwigs_ind:
 	output:
 		"results/bigwigs/coverage/individual/{sample}.bw"
 	conda:
-		"envs/deeptools.yaml"
+		"../envs/deeptools.yaml"
 	params:
 		extra="--binSize 10"
 	threads: 8
@@ -45,7 +45,7 @@ rule make_bigwigs_merged:
 	output:
 		"results/bigwigs/coverage/merged/{sample}.bw"
 	conda:
-		"envs/deeptools.yaml"
+		"../envs/deeptools.yaml"
 	params:
 		extra="--binSize 10"
 	threads: 8
