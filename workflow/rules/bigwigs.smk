@@ -10,7 +10,7 @@ rule make_bigwigs_ind:
 		extra="--binSize 10"
 	threads: 8
 	shell:
-		"bamCoverage {input.bam} -o {output} -p {threads} {params.extra}"
+		"bamCoverage --bam {input.bam} -o {output} -p {threads} {params.extra}"
 
 rule merge_bam:
 	input:
@@ -50,5 +50,5 @@ rule make_bigwigs_merged:
 		extra="--binSize 10"
 	threads: 8
 	shell:
-		"bamCoverage {input.bam} -o {output} -p {threads} {params.extra}"
+		"bamCoverage --bam {input.bam} -o {output} -p {threads} {params.extra}"
 		
