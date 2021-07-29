@@ -32,7 +32,7 @@ rule bowtie2_align:
 		sample=get_bowtie2_input,
 		index=rules.bowtie2_index.output
 	output:
-		temp("results/mapped/{sample}.bam")
+		temp("results/aligned_reads/mapped/{sample}.bam")
 	log:
 		"logs/bowtie2/{sample}.log"
 	params:
