@@ -25,7 +25,7 @@ rule merge_fastqs:
     wildcard_constraints:
         read="single|1|2",
     shell:
-        "zcat {input} > {output} 2> {log}"
+        "zcat {input} | gzip > {output} 2> {log}"
         
 rule bowtie2_align_se:
 	input:
