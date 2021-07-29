@@ -16,7 +16,7 @@ rule samtools_sort:
     input:
        "results/filtered/{sample}.bam"
     output:
-        temp("results/sorted/{sample}.bam")
+        "results/sorted/{sample}.bam"
     params:
         extra = "",
     threads:  # Samtools takes additional threads through its option -@
