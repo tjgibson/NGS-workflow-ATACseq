@@ -1,7 +1,7 @@
 rule make_bigwigs_ind:
 	input:
-		bam = "results/sorted/{sample}.bam",
-		bai = "results/sorted/{sample}.bam.bai"
+		bam = "results/aligned_reads/sorted/{sample}.bam",
+		bai = "results/aligned_reads/sorted/{sample}.bam.bai"
 	output:
 		"results/bigwigs/coverage/individual/{sample}.bw"
 	conda:
@@ -16,7 +16,7 @@ rule merge_bam:
 	input:
 		get_bam_merge
 	output:
-		temp("results/merged/{sample_group}.bam")
+		temp("results/aligned_reads/merged/{sample_group}.bam")
 	params:
 		"" # optional additional parameters as string
 	threads:  # Samtools takes additional threads through its option -@
@@ -26,9 +26,9 @@ rule merge_bam:
 
 rule samtools_index_merged:
     input:
-        "results/merged/{sample}.bam"
+        "results/aligned_reads/merged/{sample}.bam"
     output:
-        temp("results/merged/{sample}.bam.bai")
+        temp("results/aligned_reads/merged/{sample}.bam.bai")
     log:
         "logs/samtools_index/{sample}.log"
     params:
@@ -40,8 +40,8 @@ rule samtools_index_merged:
         
 rule make_bigwigs_merged:
 	input:
-		bam = "results/merged/{sample}.bam",
-		bai = "results/merged/{sample}.bam.bai"
+		bam = "results/aligned_reads/merged/{sample}.bam",
+		bai = "results/aligned_readsmerged/{sample}.bam.bai"
 	output:
 		"results/bigwigs/coverage/merged/{sample}.bw"
 	conda:
