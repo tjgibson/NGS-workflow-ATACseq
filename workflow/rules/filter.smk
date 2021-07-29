@@ -1,6 +1,6 @@
 rule filter_multireads:
     input:
-        "results/mapped/{sample}.bam"
+        "results/aligned_reads/mapped/{sample}.bam"
     output:
         temp("results/aligned_reads/filtered/{sample}.bam")
     log:
