@@ -36,7 +36,7 @@ rule bowtie2_align:
 	log:
 		"logs/bowtie2/{sample}.log"
 	params:
-		index=lambda w, input: os.path.splitext(input.index[0])[0],  # prefix of reference genome index (built with bowtie2-build)
+		index=lambda w, input: input.index[0].split('.')[0],  # prefix of reference genome index (built with bowtie2-build)
 		extra=""  # optional parameters
 	threads: 8  # Use at least two threads
 	wrapper:
