@@ -27,7 +27,7 @@ rule merge_fastqs:
     shell:
         "zcat {input} | gzip > {output} 2> {log}"
         
-rule bowtie2_align_se:
+rule bowtie2_align:
 	input:
 		sample=get_bowtie2_input,
 		index=rules.bowtie2_index.output,
