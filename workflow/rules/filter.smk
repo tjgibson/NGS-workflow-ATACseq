@@ -2,7 +2,7 @@ rule filter_multireads:
     input:
         "results/mapped/{sample}.bam"
     output:
-        temp("results/filtered/{sample}.bam")
+        temp("results/aligned_reads/filtered/{sample}.bam")
     log:
         "{sample}.log"
     params:
@@ -14,9 +14,9 @@ rule filter_multireads:
 # 
 rule samtools_sort:
     input:
-       "results/filtered/{sample}.bam"
+       "results/aligned_reads/filtered/{sample}.bam"
     output:
-        "results/sorted/{sample}.bam"
+        "results/aligned_reads/sorted/{sample}.bam"
     params:
         extra = "",
     threads:  # Samtools takes additional threads through its option -@
@@ -26,9 +26,9 @@ rule samtools_sort:
 
 rule samtools_index:
     input:
-        "results/sorted/{sample}.bam"
+        "results/aligned_reads/sorted/{sample}.bam"
     output:
-        "results/sorted/{sample}.bam.bai"
+        "results/aligned_reads/sorted/{sample}.bam.bai"
     log:
         "logs/samtools_index/{sample}.log"
     params:
