@@ -24,7 +24,7 @@ if config["use_spikeIn"]:
 			link=config["spikeIn_genome"]["link"],
 		cache: True
 		shell:
-			"curl {params.link} | pigz > {outrput}"
+			"curl {params.link} | pigz > {output}"
 
 	rule combine_genomes:
 		input:
