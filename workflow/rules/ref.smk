@@ -40,10 +40,10 @@ if config["use_spikeIn"]:
 			spikeIn_name=config["spikeIn_genome"]["name"],
 		shell:
 			"""
-			sed -e 's/>/>{ref_name}_/' {ref} > {ref} 2> {log}
-			sed -e 's/>/>{spikeIn_name}_/' {spikeIn} > spikeIn_genome.fasta 2>> {log}
-			cat {ref} {spikeIn} > {output} 2>> {log}
-			rm {ref} {spikeIn} 2>> {log}
+			sed -e 's/>/>{params.ref_name}_/' {input.ref} > {input.ref} 2> {log}
+			sed -e 's/>/>{params.spikeIn_name}_/' {input.spikeIn} > {input.spikeIn} 2>> {log}
+			cat {input.ref} {input.spikeIn} > {output} 2>> {log}
+			rm {input.ref} {input.spikeIn} 2>> {log}
 			"""
 else:
 		rule rename_genome:
