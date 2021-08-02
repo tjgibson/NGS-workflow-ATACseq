@@ -7,7 +7,7 @@ rule get_ref_genome:
 		link=config["ref_genome"]["link"],
 	cache: True
 	shell:
-		"curl {params.link} | pigz  > {output}"
+		"curl {params.link} | pigz  > {output} 2> {log}"
 
 if config["use_spikeIn"]:
 	rule get_spikeIn_genome:
@@ -35,10 +35,10 @@ if config["use_spikeIn"]:
 			spikeIn_name=config["spikeIn_genome"]["name"],
 		shell:
 			"""
-			sed -e 's/>/>{ref_name}_/' {ref} > {ref}
-			sed -e 's/>/>{spikeIn_name}_/' {spikeIn} > spikeIn_genome.fasta
-			cat {ref} {spikeIn} > {output}
-			rm {ref} {spikeIn}
+			sed -e 's/>/>{ref_name}_/' {ref} > {ref} 2> {log}
+			sed -e 's/>/>{spikeIn_name}_/' {spikeIn} > spikeIn_genome.fasta 2>> {log}
+			cat {ref} {spikeIn} > {output} 2>> {log}
+			rm {ref} {spikeIn} 2>> {log}
 			"""
 else:
 		rule rename_genome:
@@ -50,7 +50,7 @@ else:
 				"logs/rename_genome.log",
 			cache: True
 			shell:
-				"mv {input} {output}"
+				"mv {input} {output} 2> {log}"
 
 rule bowtie2_index:
 	input:
