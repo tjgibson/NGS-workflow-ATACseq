@@ -3,6 +3,9 @@ rule get_ref_genome:
 		temp("resources/ref_genome.fasta"),
 	log:
 		"logs/get_ref_genome.log",
+	conda:
+		"../envs/curl.yaml"
+
 	params:
 		link=config["ref_genome"]["link"],
 	cache: True
@@ -15,6 +18,8 @@ if config["use_spikeIn"]:
 			temp("resources/spikeIn_genome.fasta"),
 		log:
 			"logs/get_spikeIn_genome.log",
+		conda:
+			"../envs/curl.yaml"
 		params:
 			link=config["spikeIn_genome"]["link"],
 		cache: True
