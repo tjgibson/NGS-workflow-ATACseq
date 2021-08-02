@@ -4,7 +4,7 @@ rule filter_multireads:
     output:
         temp("results/aligned_reads/filtered/{sample}.bam")
     log:
-        "{sample}.log"
+        "logs/filter_multireads/{sample}.log"
     params:
         extra="-bh -q 30" # optional params string
     wrapper:
@@ -17,6 +17,8 @@ rule samtools_sort:
        "results/aligned_reads/filtered/{sample}.bam"
     output:
         "results/aligned_reads/sorted/{sample}.bam"
+    log:
+        "logs/samtools_sort/{sample}.log"
     params:
         extra = "",
     threads:  # Samtools takes additional threads through its option -@
