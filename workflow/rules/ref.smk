@@ -10,7 +10,7 @@ rule get_ref_genome:
 		link=config["ref_genome"]["link"],
 	cache: True
 	shell:
-		"curl {params.link} | pigz  > {output} 2> {log}"
+		"curl {params.link} > {output} 2> {log}"
 
 if config["use_spikeIn"]:
 	rule get_spikeIn_genome:
@@ -24,7 +24,7 @@ if config["use_spikeIn"]:
 			link=config["spikeIn_genome"]["link"],
 		cache: True
 		shell:
-			"curl {params.link} | pigz > {output}"
+			"curl {params.link} > {output}"
 
 	rule combine_genomes:
 		input:
