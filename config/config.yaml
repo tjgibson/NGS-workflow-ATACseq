@@ -5,23 +5,48 @@ samples: config/samples.tsv
 # sample).
 units: config/units.tsv
 
+# optional inclusion of certain rules -------------------------------------------------------
+mergeReads:
+  activate: True
 
-ref_genome:
+# reference genome options ------------------------------------------------------------------
+ref_genome_source: ensembl # should be either 'ensembl' or 'other'
+
+ensembl_ref_genome:
+ # Ensembl species name
+  database: ensembl
+  species: drosophila_melanogaster
+  # Ensembl release (make sure to take one where snpeff data is available, check 'snpEff databases' output)
+  release: 104
+  # Genome build
+  build: BDGP6.32
+  
+other_ref_genome:
   name: dm6
   link: http://ftp.ensembl.org/pub/release-104/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.32.dna.toplevel.fa.gz
 
+# spike-in genome options ------------------------------------------------------------------
+use_spikeIn: False
+spikeIn_genome_source: ensembl # should be either 'ensembl' or 'other'
+
+ensembl_spikeIn_genome:
+# Ensembl species name
+  database: ensembl
+  species: homo_sapiens
+  # Ensembl release (make sure to take one where snpeff data is available, check 'snpEff databases' output)
+  release: 104
+  # Genome build
+  build: GRCh38
 use_spikeIn: False
 
-spikeIn_genome:
+other_spikeIn_genome:
   name: GRCh38
   link: http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
 
 
-mergeReads:
-  activate: True
 
 
-
+# changes to rule paramters ---------------------------------------------------------------
 params:
   cutadapt-pe: ""
   cutadapt-se: ""

@@ -1,4 +1,24 @@
-rule get_ref_genome:
+if config["ref_genome_source"] == "ensembl":
+rule get_ensembl_ref_genome:
+	output:
+		temp("resources/ref_genome.fasta"),
+	log:
+		"logs/get_ref_genome.log",
+	conda:
+		"../envs/curl.yaml"
+	params:
+		database=config["ensembl_ref_genome"]["database"]
+		species=config["ensembl_ref_genome"]["species"],
+        datatype="dna",
+        build=config["ensembl_ref_genome"]["build"],
+        release=config["ensembl_ref_genome"]["release"],
+	cache: True
+	script:
+		"scripts/retrieve_ref.py"
+
+
+if config["ref_genome_source"] == "other":
+rule get_other_ref_genome:
 	output:
 		temp("resources/ref_genome.fasta"),
 	log:
@@ -7,24 +27,44 @@ rule get_ref_genome:
 		"../envs/curl.yaml"
 
 	params:
-		link=config["ref_genome"]["link"],
+		link=config["other_ref_genome"]["link"],
 	cache: True
 	shell:
 		"curl {params.link} | pigz -dc > {output} 2> {log}"
 
+
 if config["use_spikeIn"]:
-	rule get_spikeIn_genome:
-		output:
-			temp("resources/spikeIn_genome.fasta"),
-		log:
-			"logs/get_spikeIn_genome.log",
-		conda:
-			"../envs/curl.yaml"
-		params:
-			link=config["spikeIn_genome"]["link"],
-		cache: True
-		shell:
-			"curl {params.link} | pigz -dc > {output} 2> {log}"
+	if config["spikeIn_genome_source"] == "ensembl":
+		rule get_ensembl_spikeIn_genome:
+			output:
+				temp("resources/spikeIn_genome.fasta"),
+			log:
+				"logs/get_ref_genome.log",
+			conda:
+				"../envs/curl.yaml"
+			params:
+				database=config["ensembl_spikeIn_genome"]["database"]
+				species=config["ensembl_spikeIn_genome"]["species"],
+				datatype="dna",
+				build=config["ensembl_spikeIn_genome"]["build"],
+				release=config["ensembl_spikeIn_genome"]["release"],
+			cache: True
+			script:
+				"scripts/retrieve_ref.py"
+
+	if config["spikeIn_genome_source"] == "other":
+		rule get_other_spikeIn_genome:
+			output:
+				temp("resources/spikeIn_genome.fasta"),
+			log:
+				"logs/get_spikeIn_genome.log",
+			conda:
+				"../envs/curl.yaml"
+			params:
+				link=config["other_spikeIn_genome"]["link"],
+			cache: True
+			shell:
+				"curl {params.link} | pigz -dc > {output} 2> {log}"
 
 	rule combine_genomes:
 		input:
@@ -35,13 +75,10 @@ if config["use_spikeIn"]:
 		log:
 			"logs/combine_genomes.log",
 		cache: True
-		params:
-			ref_name=config["ref_genome"]["name"],
-			spikeIn_name=config["spikeIn_genome"]["name"],
 		shell:
 			"""
-			sed -e 's/>/>{params.ref_name}_/' {input.ref} > {input.ref} 2> {log}
-			sed -e 's/>/>{params.spikeIn_name}_/' {input.spikeIn} > {input.spikeIn} 2>> {log}
+			sed -e 's/>/>ref_/' {input.ref} > {input.ref} 2> {log}
+			sed -e 's/>/>spikeIn_/' {input.spikeIn} > {input.spikeIn} 2>> {log}
 			cat {input.ref} {input.spikeIn} > {output} 2>> {log}
 			rm {input.ref} {input.spikeIn} 2>> {log}
 			"""
