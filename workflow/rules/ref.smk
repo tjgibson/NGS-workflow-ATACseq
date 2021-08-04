@@ -1,36 +1,36 @@
 if config["ref_genome_source"] == "ensembl":
-rule get_ensembl_ref_genome:
-	output:
-		temp("resources/ref_genome.fasta"),
-	log:
-		"logs/get_ref_genome.log",
-	conda:
-		"../envs/curl.yaml"
-	params:
-		database=config["ensembl_ref_genome"]["database"]
-		species=config["ensembl_ref_genome"]["species"],
-        datatype="dna",
-        build=config["ensembl_ref_genome"]["build"],
-        release=config["ensembl_ref_genome"]["release"],
-	cache: True
-	script:
-		"scripts/retrieve_ref.py"
+	rule get_ensembl_ref_genome:
+		output:
+			temp("resources/ref_genome.fasta"),
+		log:
+			"logs/get_ref_genome.log",
+		conda:
+			"../envs/curl.yaml"
+		params:
+			database=config["ensembl_ref_genome"]["database"]
+			species=config["ensembl_ref_genome"]["species"],
+		datatype="dna",
+		build=config["ensembl_ref_genome"]["build"],
+		release=config["ensembl_ref_genome"]["release"],
+		cache: True
+		script:
+			"scripts/retrieve_ref.py"
 
 
 if config["ref_genome_source"] == "other":
-rule get_other_ref_genome:
-	output:
-		temp("resources/ref_genome.fasta"),
-	log:
-		"logs/get_ref_genome.log",
-	conda:
-		"../envs/curl.yaml"
+	rule get_other_ref_genome:
+		output:
+			temp("resources/ref_genome.fasta"),
+		log:
+			"logs/get_ref_genome.log",
+		conda:
+			"../envs/curl.yaml"
 
-	params:
-		link=config["other_ref_genome"]["link"],
-	cache: True
-	shell:
-		"curl {params.link} | pigz -dc > {output} 2> {log}"
+		params:
+			link=config["other_ref_genome"]["link"],
+		cache: True
+		shell:
+			"curl {params.link} | pigz -dc > {output} 2> {log}"
 
 
 if config["use_spikeIn"]:
