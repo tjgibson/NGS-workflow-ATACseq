@@ -20,7 +20,7 @@
 # if config["ref_genome_source"] == "other":
 rule get_ref_genome:
 	output:
-		temp("resources/ref_genome.fasta"),
+		temp("resources/ref_genome.fasta.gz"),
 	log:
 		"logs/get_ref_genome.log",
 	conda:
@@ -30,7 +30,7 @@ rule get_ref_genome:
 		link=config["ref_genome"]["link"],
 	cache: True
 	shell:
-		"curl {params.link} | pigz -dc > {output} 2> {log}"
+		"curl {params.link} > {output} 2> {log}"
 
 
 if config["use_spikeIn"]:
@@ -55,7 +55,7 @@ if config["use_spikeIn"]:
 # 	if config["spikeIn_genome_source"] == "other":
 	rule get_spikeIn_genome:
 		output:
-			temp("resources/spikeIn_genome.fasta"),
+			temp("resources/spikeIn_genome.fasta.gz"),
 		log:
 			"logs/get_spikeIn_genome.log",
 		conda:
@@ -64,7 +64,7 @@ if config["use_spikeIn"]:
 			link=config["spikeIn_genome"]["link"],
 		cache: True
 		shell:
-			"curl {params.link} | pigz -dc > {output} 2> {log}"
+			"curl {params.link} > {output} 2> {log}"
 
 	rule combine_genomes:
 		input:
