@@ -68,10 +68,10 @@ if config["use_spikeIn"]:
 
 	rule combine_genomes:
 		input:
-			ref="resources/ref_genome.fasta",
-			spikeIn="resources/spikeIn_genome.fasta",
+			ref="resources/ref_genome.fasta.gz",
+			spikeIn="resources/spikeIn_genome.fasta.gz",
 		output:
-			temp("resources/genome.fasta"),
+			temp("resources/genome.fasta.gz"),
 		log:
 			"logs/combine_genomes.log",
 		cache: True
