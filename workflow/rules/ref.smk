@@ -77,7 +77,6 @@ if config["use_spikeIn"]:
 		cache: True
 		shell:
 			"""
-			sed -e 's/>/>ref_/' {input.ref} > {input.ref} 2> {log}
 			sed -e 's/>/>spikeIn_/' {input.spikeIn} > {input.spikeIn} 2>> {log}
 			cat {input.ref} {input.spikeIn} > {output} 2>> {log}
 			rm {input.ref} {input.spikeIn} 2>> {log}
