@@ -77,9 +77,8 @@ if config["use_spikeIn"]:
 		cache: True
 		shell:
 			"""
-			sed -e 's/>/>spikeIn_/' {input.spikeIn} > {input.spikeIn} 2>> {log}
-			cat {input.ref} {input.spikeIn} > {output} 2>> {log}
-			rm {input.ref} {input.spikeIn} 2>> {log}
+			zcat {input.spikeIn} | sed -e 's/>/>spikeIn_/' | gzip > {input.spikeIn} 2>> {log}
+			zcat {input.ref} {input.spikeIn} | gzip > {output} 2>> {log}
 			"""
 else:
 		rule rename_genome:
