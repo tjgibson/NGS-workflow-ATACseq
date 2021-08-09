@@ -77,9 +77,9 @@ if config["use_spikeIn"]:
 		cache: True
 		shell:
 			"""
-			zcat {input.spikeIn} | sed -e 's/>/>spikeIn_/' | gzip > tmp_spikeIn.fasta.gz 2>> {log}
-			zcat {input.ref} tmp_spikeIn.fasta.gz | gzip > {output} 2>> {log}
-			rm tmp_spikeIn.fasta.gz
+			zcat {input.spikeIn} | sed -e 's/>/>spikeIn_/' | gzip > resources/tmp_spikeIn.fasta.gz 2>> {log}
+			zcat {input.ref} resources/tmp_spikeIn.fasta.gz | gzip > {output} 2>> {log}
+			rm resources/tmp_spikeIn.fasta.gz
 			"""
 else:
 		rule rename_genome:
