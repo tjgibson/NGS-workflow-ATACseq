@@ -35,6 +35,8 @@ if config["use_spikeIn"]:
 			temp("resources/genome.fasta.gz"),
 		log:
 			"logs/combine_genomes.log",
+		conda:
+			"../envs/seqkit.yaml"
 		cache: True
 		shell:
 			"""
