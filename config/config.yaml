@@ -8,17 +8,23 @@ units: config/units.tsv
 # optional inclusion of certain rules -------------------------------------------------------
 mergeReads:
   activate: True
-  
+
+# text file containing list of chromosomes to keep when filtering ---------------------------
+filter_chroms: True
+keep_chroms: config/keep_chroms.txt
+
+# reference genome options ------------------------------------------------------------------
+use_spikeIn: False
 ref_genome:
   name: dm6
-  link: http://ftp.ensembl.org/pub/release-104/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.32.dna.toplevel.fa.gz
+  link: https://hgdownload.soe.ucsc.edu/goldenPath/dm6/bigZips/dm6.fa.gz
 
 # spike-in genome options ------------------------------------------------------------------
 use_spikeIn: False
 
 spikeIn_genome:
-  name: GRCh38
-  link: http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
+  name: yeast_w303
+  link: http://sgd-archive.yeastgenome.org/sequence/strains/W303/W303_SGD_2015_JRIU00000000/W303_SGD_2015_JRIU00000000.fsa.gz
 
 
 

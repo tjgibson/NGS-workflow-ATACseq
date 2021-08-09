@@ -9,6 +9,7 @@ workflow/scripts/.snakemake*
 !config/config.yaml
 !config/samples.tsv
 !config/units.tsv
+!config/keep_chroms.txt
 !resources
 !resources/*
 !workflow/envs
