@@ -56,6 +56,24 @@ else:
 			shell:
 				"mv {input} {output} 2> {log}"
 
+				
+if config["filter_chroms"]:
+	rule define_keep_chroms:
+		input:
+			genome="resources/genome.fasta.gz",
+			keep_chroms=config["keep_chroms"]
+		output:
+			"resources/keep_chroms.bed",
+		log:
+			"logs/define_keep_chroms.log",
+		conda:
+			"../envs/seqkit.yaml"
+		cache: True
+		shell:
+			"seqkit grep -f {input.keep_chroms} {input.genome}"
+			" | seqkit fx2tab -nil"
+			" | awk '{print $1, 1, $2}' > {output}"
+				
 rule bowtie2_index:
 	input:
 		reference="resources/genome.fasta"
