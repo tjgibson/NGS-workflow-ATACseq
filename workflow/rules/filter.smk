@@ -1,17 +1,40 @@
-rule filter_multireads:
-    input:
-        "results/aligned_reads/mapped/{sample}.bam"
-    output:
-        temp("results/aligned_reads/filtered/{sample}.bam")
-    log:
-        "logs/filter_multireads/{sample}.log"
-    params:
-        extra="-bh -q 30" # optional params string
-    wrapper:
-        "0.77.0/bio/samtools/view"
+if config["filter_chroms"]
+	rule filter_multireads:
+		input:
+			"results/aligned_reads/mapped/{sample}.bam"
+		output:
+			temp("results/aligned_reads/unireads/{sample}.bam")
+		log:
+			"logs/filter_multireads/{sample}.log"
+		params:
+			extra="-bh -q 30" # optional params string
+		wrapper:
+			"0.77.0/bio/samtools/view"
 
-# rule filter_chroms:
-# 
+	rule filter_chroms:
+		input:
+			"results/aligned_reads/unireads/{sample}.bam"
+		output:
+			temp("results/aligned_reads/filtered/{sample}.bam")
+		log:
+			"logs/filter_multireads/{sample}.log"
+		params:
+			extra="-bh -L {rules.define_keep_chroms.output}" # optional params string
+		wrapper:
+			"0.77.0/bio/samtools/view"
+else:
+	rule filter_multireads:
+		input:
+			"results/aligned_reads/mapped/{sample}.bam"
+		output:
+			temp("results/aligned_reads/filtered/{sample}.bam")
+		log:
+			"logs/filter_multireads/{sample}.log"
+		params:
+			extra="-bh -q 30" # optional params string
+		wrapper:
+			"0.77.0/bio/samtools/view"
+		
 rule samtools_sort:
     input:
        "results/aligned_reads/filtered/{sample}.bam"
