@@ -85,7 +85,7 @@ rule bowtie2_index:
 	log:
 		"logs/bowtie2_build/build.log"
 	params:
-		extra=""  # optional parameters
+		extra=config["params"]["bowtie2_align"]  # optional parameters
 	threads: 8
 	wrapper:
 		"0.77.0/bio/bowtie2/build"
