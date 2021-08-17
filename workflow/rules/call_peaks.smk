@@ -20,10 +20,6 @@ rule macs2_call_peaks_broad:
 	output:
 		multiext("results/broad_peaks/{sample}",
                  "_peaks.xls",   ### required
-                 ### optional output files
-                 # these output extensions internally set the --bdg or -B option:
-                 "_treat_pileup.bdg",
-                 "_control_lambda.bdg",
                  # these output extensions internally set the --broad option:
                  "_peaks.broadPeak",
                  "_peaks.gappedPeak"
