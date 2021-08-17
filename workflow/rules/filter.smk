@@ -65,6 +65,14 @@ rule samtools_index:
 
 # rule align_stats:
 # 
-# rule filter_stats: 
-# 
+rule samtools_idxstats:
+    input:
+        bam="results/aligned_reads/sorted/{sample}.bam",
+        idx="results/aligned_reads/sorted/{sample}.bam.bai"
+    output:
+        "results/aligned_reads/stats/{sample}.idxstats"
+    log:
+        "logs/samtools/idxstats/{sample}.log"
+    wrapper:
+        "0.77.0/bio/samtools/idxstats" 
 # rule summarize_read_processing:
