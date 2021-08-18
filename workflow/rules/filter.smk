@@ -13,7 +13,7 @@ if config["filter_chroms"]:
 
 	rule filter_chroms:
 		input:
-			bam="results/aligned_reads/unireads/{sample}.bam"
+			bam="results/aligned_reads/unireads/{sample}.bam",
 			keep_chroms=rules.define_keep_chroms.output
 		output:
 			temp("results/aligned_reads/filtered/{sample}.bam")
