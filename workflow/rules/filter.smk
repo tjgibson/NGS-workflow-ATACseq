@@ -1,4 +1,4 @@
-if config["filter_chroms"]
+if config["filter_chroms"]:
 	rule filter_multireads:
 		input:
 			"results/aligned_reads/mapped/{sample}.bam"
