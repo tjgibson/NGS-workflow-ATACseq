@@ -2,7 +2,7 @@ rule macs2_call_peaks_narrow_se:
 	input:
 		unpack(get_macs2_input_narrow_se)
 	output:
-		multiext("results/narrow_peaks/{sample}",
+		multiext("results/narrow_peaks/se/{sample}",
                  "_peaks.xls",   ### required
                  ### optional output files
                  "_peaks.narrowPeak",
@@ -18,7 +18,7 @@ rule macs2_call_peaks_broad_se:
 	input:
 		unpack(get_macs2_input_broad_se)
 	output:
-		multiext("results/broad_peaks/{sample}",
+		multiext("results/broad_peaks/se/{sample}",
                  "_peaks.xls",   ### required
                  # these output extensions internally set the --broad option:
                  "_peaks.broadPeak",
@@ -34,7 +34,7 @@ rule macs2_call_peaks_narrow_pe:
 	input:
 		unpack(get_macs2_input_narrow_pe)
 	output:
-		multiext("results/narrow_peaks/{sample}",
+		multiext("results/narrow_peaks/pe/{sample}",
                  "_peaks.xls",   ### required
                  ### optional output files
                  "_peaks.narrowPeak",
@@ -50,7 +50,7 @@ rule macs2_call_peaks_broad_pe:
 	input:
 		unpack(get_macs2_input_broad_pe)
 	output:
-		multiext("results/broad_peaks/{sample}",
+		multiext("results/broad_peaks/pe/{sample}",
                  "_peaks.xls",   ### required
                  # these output extensions internally set the --broad option:
                  "_peaks.broadPeak",
