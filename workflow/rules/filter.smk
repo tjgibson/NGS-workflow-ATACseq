@@ -14,13 +14,13 @@ if config["filter_chroms"]:
 	rule filter_chroms:
 		input:
 			bam="results/aligned_reads/unireads/{sample}.bam",
-			keep_chroms=rules.define_keep_chroms.output
+			keep_chroms="keep_chroms.bed"
 		output:
 			temp("results/aligned_reads/filtered/{sample}.bam")
 		log:
 			"logs/filter_chroms/{sample}.log"
 		params:
-			extra="-bh -L ", input.keep_chroms # optional params string
+			extra="-bh -L keep_chroms.bed" # optional params string
 		wrapper:
 			"0.77.0/bio/samtools/view"
 else:
