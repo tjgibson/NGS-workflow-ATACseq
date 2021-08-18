@@ -47,9 +47,9 @@ if config["use_spikeIn"]:
 else:
 		rule rename_genome:
 			input:
-				"resources/ref_genome.fasta",
+				"resources/ref_genome.fasta.gz",
 			output:
-				"resources/genome.fasta",
+				"resources/genome.fasta.gz",
 			log:
 				"logs/rename_genome.log",
 			cache: True
@@ -76,7 +76,7 @@ if config["filter_chroms"]:
 				
 rule bowtie2_index:
 	input:
-		reference="resources/genome.fasta"
+		reference="resources/genome.fasta.gz"
 	output:
 		multiext(
 			"resources/genome",
