@@ -17,7 +17,7 @@ if config["filter_chroms"]:
 		output:
 			temp("results/aligned_reads/filtered/{sample}.bam")
 		log:
-			"logs/filter_multireads/{sample}.log"
+			"logs/filter_chroms/{sample}.log"
 		params:
 			extra="-bh -L {rules.define_keep_chroms.output}" # optional params string
 		wrapper:
