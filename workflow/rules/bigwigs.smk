@@ -7,7 +7,7 @@ rule make_bigwigs_ind:
 	conda:
 		"../envs/deeptools.yaml"
 	params:
-		extra="--binSize 10"
+		extra=config["params"]["bigwigs_ind"] 
 	threads: 8
 	shell:
 		"bamCoverage --bam {input.bam} -o {output} -p {threads} {params.extra}"
@@ -47,7 +47,7 @@ rule make_bigwigs_merged:
 	conda:
 		"../envs/deeptools.yaml"
 	params:
-		extra="--binSize 10"
+		extra=config["params"]["bigwigs_merged"] 
 	threads: 8
 	shell:
 		"bamCoverage --bam {input.bam} -o {output} -p {threads} {params.extra}"
