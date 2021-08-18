@@ -47,7 +47,7 @@ if config["use_spikeIn"]:
 else:
 		rule rename_genome:
 			input:
-				"resources/ref_genome.fasta.gz",
+				temp("resources/ref_genome.fasta.gz"),
 			output:
 				"resources/genome.fasta.gz",
 			log:
