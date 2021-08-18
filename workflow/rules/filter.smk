@@ -20,7 +20,7 @@ if config["filter_chroms"]:
 		log:
 			"logs/filter_chroms/{sample}.log"
 		params:
-			extra="-bh -L {input.keep_chroms}" # optional params string
+			extra="-bh -L {}".format(input.keep_chroms) # optional params string
 		wrapper:
 			"0.77.0/bio/samtools/view"
 else:
