@@ -41,7 +41,7 @@ rule samtools_index_merged:
 rule make_bigwigs_merged:
 	input:
 		bam = "results/aligned_reads/merged/{sample}.bam",
-		bai = "results/aligned_readsmerged/{sample}.bam.bai"
+		bai = "results/aligned_reads/merged/{sample}.bam.bai"
 	output:
 		"results/bigwigs/coverage/merged/{sample}.bw"
 	conda:
