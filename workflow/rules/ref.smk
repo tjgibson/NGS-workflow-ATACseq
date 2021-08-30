@@ -47,9 +47,9 @@ if config["use_spikeIn"]:
 else:
 		rule rename_genome:
 			input:
-				"resources/ref_genome.fasta",
+				"resources/ref_genome.fasta.gz",
 			output:
-				"resources/genome.fasta",
+				temp("resources/genome.fasta.gz"),
 			log:
 				"logs/rename_genome.log",
 			cache: True
@@ -72,11 +72,11 @@ if config["filter_chroms"]:
 		shell:
 			"seqkit grep -f {input.keep_chroms} {input.genome}"
 			" | seqkit fx2tab -nil"
-			" | awk '{print $1, 1, $2}' > {output}"
+			" | awk '{{print $1, 1, $2}}' > {output}"
 				
 rule bowtie2_index:
 	input:
-		reference="resources/genome.fasta"
+		reference="resources/genome.fasta.gz"
 	output:
 		multiext(
 			"resources/genome",
@@ -85,7 +85,7 @@ rule bowtie2_index:
 	log:
 		"logs/bowtie2_build/build.log"
 	params:
-		extra=""  # optional parameters
+		extra="" # optional parameters
 	threads: 8
 	wrapper:
 		"0.77.0/bio/bowtie2/build"

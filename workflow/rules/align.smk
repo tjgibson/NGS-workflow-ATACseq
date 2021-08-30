@@ -37,7 +37,7 @@ rule bowtie2_align:
 		"logs/bowtie2/{sample}.log"
 	params:
 		index=lambda w, input: input.index[0].split('.')[0],  # prefix of reference genome index (built with bowtie2-build)
-		extra=""  # optional parameters
+		extra=config["params"]["bowtie2_align"]   # optional parameters
 	threads: 8  # Use at least two threads
 	wrapper:
 		"0.77.0/bio/bowtie2/align"
