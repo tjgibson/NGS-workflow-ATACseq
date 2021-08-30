@@ -51,4 +51,26 @@ rule make_bigwigs_merged:
 	threads: 8
 	shell:
 		"bamCoverage --bam {input.bam} -o {output} -p {threads} {params.extra}"
-		
+
+
+rule zscore_normalize_bigwigs:
+	input:
+		"results/bigwigs/coverage/merged/{sample}.bw"
+	output:
+		"results/bigwigs/zscore_normalized/merged/{sample}.bw"
+	conda:
+		"../envs/zscore_normalize_bw.yaml"
+	script:
+		"../scripts/zscore_normalize_bw.R"
+
+
+# 	rule spikeIn_normalize_bigwigs:
+# 		input:
+# 			bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
+			mapping_stats=get_spikeIn_input
+# 		output:
+# 			"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
+# 		conda:
+# 			"../envs/zscore_normalize_bw.yaml"
+# 		script:
+# 			"../scripts/spikeIn_normalize_bw.R"
