@@ -67,7 +67,7 @@ rule zscore_normalize_bigwigs:
 # 	rule spikeIn_normalize_bigwigs:
 # 		input:
 # 			bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
-			mapping_stats=get_spikeIn_input
+# 			mapping_stats=get_spikeIn_input
 # 		output:
 # 			"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
 # 		conda:
