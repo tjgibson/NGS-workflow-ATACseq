@@ -116,3 +116,28 @@ def get_macs2_input_broad_pe(wildcards):
 					return {"treatment": "results/aligned_reads/sorted/{sample}.bam"}
 				else:
 					return {"treatment": "results/aligned_reads/sorted/{sample}.bam", "control": "results/aligned_reads/sorted/{input}.bam".format(input=unit.iloc[0].input)}
+
+def get_final_output():
+	 final_output = []
+	 
+	 # bigwigs for individual replicates
+	  final_output.extend(expand(
+                    [
+                        "results/bigwigs/coverage/individual/{sample}.bw"
+                    ],
+                    sample = units["sample"]
+                )
+            )
+	 
+	 # bigwigs for merged replicates
+	  final_output.extend(expand(
+                    [
+                        "results/bigwigs/coverage/merged/{sample}.bw"
+                    ],
+                    sample = units["sample"]
+                )
+            )
+	 
+	 # peaks
+	 
+	 return final_output

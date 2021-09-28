@@ -21,9 +21,6 @@ container: "docker://continuumio/miniconda3"
 
 
 ##### load rules #####
-
-# accession = ["SRR7050509", "SRR7050510"]
-
 include: "rules/common.smk"
 include: "rules/ref.smk"
 include: "rules/align.smk"
