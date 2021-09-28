@@ -139,7 +139,7 @@ def get_final_output():
             )
 	 
 	 # peaks
-	if any(unit["call_peaks"]):
+	if any(units["call_peaks"]):
 	 
 		# add narrow peak output
 		if any((units["peak_type"] == "narrow") & (units["read_format"] == "SE")):
