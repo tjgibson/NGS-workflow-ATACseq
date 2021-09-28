@@ -118,26 +118,73 @@ def get_macs2_input_broad_pe(wildcards):
 					return {"treatment": "results/aligned_reads/sorted/{sample}.bam", "control": "results/aligned_reads/sorted/{input}.bam".format(input=unit.iloc[0].input)}
 
 def get_final_output():
-	 final_output = []
-	 
-	 # bigwigs for individual replicates
-	  final_output.extend(expand(
+	final_output = []
+
+	# bigwigs for individual replicates
+	final_output.extend(expand(
                     [
                         "results/bigwigs/coverage/individual/{sample}.bw"
                     ],
-                    sample = units["sample"]
+                    sample = units["sample_name"]
                 )
             )
-	 
+
 	 # bigwigs for merged replicates
-	  final_output.extend(expand(
+	final_output.extend(expand(
                     [
                         "results/bigwigs/coverage/merged/{sample}.bw"
                     ],
-                    sample = units["sample"]
+                    sample = units["sample_name"]
                 )
             )
 	 
 	 # peaks
+	if any(unit["call_peaks"]):
 	 
-	 return final_output
+		# add narrow peak output
+		if any((units["peak_type"] == "narrow") & (units["read_format"] == "SE")):
+			out_samples =  units[(units["peak_type"] == "narrow") & (units["read_format"] == "SE")]
+			final_output.extend(expand(
+                    [
+                        "results/narrow_peaks/se/{sample}{ext}"
+                    ],
+                    sample = out_samples["sample_name"],
+                    ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
+                )
+            )
+        
+		if any((units["peak_type"] == "narrow") & (units["read_format"] == "PE")):
+			out_samples =  units[(units["peak_type"] == "narrow") & (units["read_format"] == "PE")]
+			final_output.extend(expand(
+                    [
+                        "results/narrow_peaks/pe/{sample}{ext}"
+                    ],
+                    sample = out_samples["sample_name"],
+                    ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
+                )
+            )
+
+		if any((units["peak_type"] == "broad") & (units["read_format"] == "SE")):
+			out_samples =  units[(units["peak_type"] == "broad") & (units["read_format"] == "SE")]
+			final_output.extend(expand(
+                    [
+                        "results/broad_peaks/se/{sample}{ext}"
+                    ],
+                    sample = out_samples["sample_name"],
+                    ext = ["_peaks.xls", "_peaks.broadPeak","_peaks.gappedPeak"]
+                )
+            )
+
+		if any((units["peak_type"] == "broad") & (units["read_format"] == "PE")):
+			out_samples =  units[(units["peak_type"] == "broad") & (units["read_format"] == "PE")]
+			final_output.extend(expand(
+                    [
+                        "results/broad_peaks/pe/{sample}{ext}"
+                    ],
+                    sample = out_samples["sample_name"],
+                    ext = ["_peaks.xls", "_peaks.broadPeak","_peaks.gappedPeak"]
+                )
+            )	
+
+	return final_output
+	
