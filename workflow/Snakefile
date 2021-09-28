@@ -29,4 +29,4 @@ include: "rules/call_peaks.smk"
 ##### target rules #####
 rule all:
     input:
-        get_final_output()
+        get_final_output
