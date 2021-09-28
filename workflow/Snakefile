@@ -18,7 +18,10 @@ configfile: "config/config.yaml"
 # with --use-conda --use-singularity
 container: "docker://continuumio/miniconda3"
 
-
+##### target rules #####
+rule all:
+    input:
+        get_final_output()
 
 ##### load rules #####
 include: "rules/common.smk"
@@ -29,10 +32,3 @@ include: "rules/bigwigs.smk"
 include: "rules/call_peaks.smk"
 
 
-##### target rules #####
-
-
-# rule all:
-#     input:
-#         get_final_output(),
-#         "results/qc/multiqc_report.html",
