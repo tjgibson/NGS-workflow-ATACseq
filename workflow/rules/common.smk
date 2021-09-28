@@ -120,7 +120,7 @@ def get_macs2_input_broad_pe(wildcards):
 def get_final_output():
 	final_output = []
 
-	# bigwigs for individual replicates
+	# coverage bigwigs for individual replicates
 	final_output.extend(expand(
                     [
                         "results/bigwigs/coverage/individual/{sample}.bw"
@@ -129,7 +129,7 @@ def get_final_output():
                 )
             )
 
-	 # bigwigs for merged replicates
+	# coverage bigwigs for merged replicates
 	final_output.extend(expand(
                     [
                         "results/bigwigs/coverage/merged/{sample}.bw"
@@ -137,7 +137,16 @@ def get_final_output():
                     sample = units["sample_name"]
                 )
             )
-	 
+	
+	# z-score normalized bigwigs for merged replicates
+	final_output.extend(expand(
+                    [
+                        "results/bigwigs/zscore_normalized/merged/{sample}.bw"
+                    ],
+                    sample = units["sample_group"]
+                )
+            )
+	
 	 # peaks
 	if any(units["call_peaks"]):
 	 
