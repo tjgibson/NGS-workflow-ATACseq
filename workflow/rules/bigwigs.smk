@@ -64,10 +64,20 @@ rule zscore_normalize_bigwigs:
 		"../scripts/zscore_normalize_bw.R"
 
 
+rule compute_scaling_factors:
+	input:
+		mapping_stats=get_spikeIn_input
+	output:
+		"results/scaling_factors/individual_scaling_factors.tsv"
+	conda:
+		"../envs/zscore_normalize_bw.yaml"
+	script:
+		"../scripts/compute_scaling_factors.R"
+
+
 # 	rule spikeIn_normalize_bigwigs:
 # 		input:
 # 			bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
-# 			mapping_stats=get_spikeIn_input
 # 		output:
 # 			"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
 # 		conda:
