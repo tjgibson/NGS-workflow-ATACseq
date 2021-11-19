@@ -2,12 +2,33 @@
 # load required packages
 library(tidyverse)
 
+## FOR TESTING ONLY ##
+test_mapping_input <- fs::dir_ls("../2021_Gaskill_Gibson/data/2020_11_MG_CHIPseq/analysis_w_spike_in/summary_files/", regexp = "filtered[.]stats$")
+
+mapping_stats <- test_mapping_input %>%
+  map_dfr(read_tsv, .id = "source", col_names = c("chromosome", "chromosome_size", "mapped_reads", "unmapped_reads")) %>%
+  mutate(sample_name = basename(source)) %>% 
+  mutate(sample_name = gsub("_filtered.stats", "", sample_name))
+
+mapping_stats <- mapping_stats %>%
+  mutate(reference_genome = case_when(!str_detect(chromosome, "chr")  ~ "spikeIn",
+                                      str_detect(chromosome, "chr")  ~ "reference")) 
+
+
+sample_table <- "../NGS_workflows/snakemake_test/test_sample_table.tsv" %>% 
+  read_tsv() %>% 
+  
+  # remove redundant technical replicates from sample_table
+  distinct(sample_name, .keep_all = TRUE)
+  
+  ######################
+
 # import data ------------------------------------------------------------------
 # read in all relevant stat files
 mapping_stats <- snakemake@input[["mapping_stats"]] %>%
   map_dfr(read_tsv, .id = "source", col_names = c("chromosome", "chromosome_size", "mapped_reads", "unmapped_reads")) %>%
   mutate(sample_name = basename(source)) %>% 
-  mutate(sample = gsub(".idxstats", "", sample))
+  mutate(sample = gsub(".idxstats", "", sample_name))
 
 # add column marking reference or spike-in chromosomes
 mapping_stats <- mapping_stats %>%
@@ -49,8 +70,8 @@ sample_table <- sample_table %>%
     is.na(IP) ~ sample_name,
     !is.na(IP) ~ IP
   ))
-  
-  
+
+
 
 
 # prepare sample_table and mapping_stats tables for join
@@ -59,11 +80,16 @@ individual_mapping_stats <- mapping_stats %>%
 
 # join sample_table and mapping stats
 individual_scaling_factors <- sample_table %>%
-  left_join(individual_mapping_stats, by = "sample")
+  left_join(individual_mapping_stats, by = "sample_name")
 
 
 # compute normalization factors for individual samples -------------------------
-if (all(individual_scaling_factors$has_input)) {
+sample_has_input <- individual_scaling_factors %>% 
+  filter(chip_sample_type == "IP") %>% 
+  select(has_input) %>% 
+  pull()
+
+if (all(sample_has_input)) {
   
   individual_scaling_factors <- individual_scaling_factors %>% 
     pivot_wider(names_from = chip_sample_type, values_from = percent_spikeIn, id_cols = IP_group) %>% 
@@ -82,57 +108,44 @@ if (all(individual_scaling_factors$has_input)) {
 individual_scaling_factors %>% 
   write_tsv(snakemake@output[[1]])
 
-# compute normalization factors for merged samples -----------------------------
+# prepare data for merged samples -----------------------------
 merged_mapping_stats <- mapping_stats %>% 
-  select(sample, reference, spikeIn)
+  select(sample_name, reference, spikeIn)
 
 # combine replicate reads
 merged_mapping_stats <- sample_table %>% 
-  left_join(merged_mapping_stats, by = "sample") %>% 
+  left_join(merged_mapping_stats, by = "sample_name") %>% 
   group_by(sample_group) %>% 
   summarise(spikeIn = sum(spikeIn), reference = sum(reference))
 
-# create new column indicating input/IP pairs for merged replicates
-sample_table$IP_group <- NA_character_
 
-for (i in 1:nrow(sample_table)) {
-  i_sample_name <- sample_table[i,"sample_name"] %>% pull()
-  if (sample_table[i,"chip_sample_type"] == "input") {
-    IP_sample <- sample_table %>% 
-      filter(input == i_sample_name) %>% 
-      select(sample_group) %>% 
-      pull()
-    sample_table[i, "IP_group"] <- IP_sample
-  } else {
-    IP_sample <- sample_table %>% 
-      filter(sample_name == i_sample_name) %>% 
-      select(sample_group) %>% 
-      pull()
-    sample_table[i, "IP_group"] <- IP_sample
-  }
-}
 
 
 # create new column indicating input/IP pairs
 tmp <- sample_table %>% select(input, sample_group) %>% dplyr::rename(IP = sample_group, sample_name = input)
 sample_table <- sample_table %>% 
-  left_join(tmp, by = "sample_group") %>% 
+  select(-IP, -IP_group) %>% 
+  left_join(tmp, by = "sample_name") %>% 
   mutate(IP_group = case_when(
-    is.na(IP) ~ sample_name,
+    is.na(IP) ~ sample_group,
     !is.na(IP) ~ IP
   ))
 
 
 
 # join sample_table and mapping stats for merged reads
-merged_scaling_factors <- sample_table %>% 
-  left_join(merged_mapping_stats, by = "sample_group") %>% 
-  # distinct(sample_group, .keep_all = TRUE) %>% 
+merged_scaling_factors <- merged_mapping_stats %>% 
+  left_join(select(sample_table, sample_group, chip_sample_type,IP_group, has_input), by = "sample_group") %>% 
+  distinct(.keep_all = TRUE) %>%
   mutate(total_mapped_reads = reference + spikeIn) %>%
   mutate(percent_reference = reference / total_mapped_reads * 100, percent_spikeIn = spikeIn / total_mapped_reads * 100)
 
 # compute normalization factors for merged samples -------------------------
-if (all(merged_scaling_factors$has_input)) {
+sample_has_input <- merged_scaling_factors %>% 
+  filter(chip_sample_type == "IP") %>% 
+  select(has_input) %>% 
+  pull()
+if (all(sample_has_input)) {
   
   merged_scaling_factors <- merged_scaling_factors %>% 
     pivot_wider(names_from = chip_sample_type, values_from = percent_spikeIn, id_cols = IP_group) %>% 
