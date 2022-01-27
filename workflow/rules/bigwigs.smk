@@ -3,7 +3,7 @@ rule make_bigwigs_ind:
 		bam = "results/aligned_reads/sorted/{sample}.bam",
 		bai = "results/aligned_reads/sorted/{sample}.bam.bai"
 	output:
-		"results/bigwigs/coverage/individual/{sample}.bw"
+		temp("results/bigwigs/coverage/individual/{sample}.bw")
 	conda:
 		"../envs/deeptools.yaml"
 	params:
@@ -43,7 +43,7 @@ rule make_bigwigs_merged:
 		bam = "results/aligned_reads/merged/{sample}.bam",
 		bai = "results/aligned_reads/merged/{sample}.bam.bai"
 	output:
-		"results/bigwigs/coverage/merged/{sample}.bw"
+		temp("results/bigwigs/coverage/merged/{sample}.bw")
 	conda:
 		"../envs/deeptools.yaml"
 	params:
@@ -53,7 +53,17 @@ rule make_bigwigs_merged:
 		"bamCoverage --bam {input.bam} -o {output} -p {threads} {params.extra}"
 
 
-rule zscore_normalize_bigwigs:
+rule zscore_normalize_ind_bigwigs:
+	input:
+		"results/bigwigs/coverage/individual/{sample}.bw"
+	output:
+		"results/bigwigs/zscore_normalized/individual/{sample}.bw"
+	conda:
+		"../envs/zscore_normalize_bw.yaml"
+	script:
+		"../scripts/zscore_normalize_bw.R"
+
+rule zscore_normalize_merged_bigwigs:
 	input:
 		"results/bigwigs/coverage/merged/{sample}.bw"
 	output:
@@ -69,18 +79,31 @@ rule compute_scaling_factors:
 		mapping_stats=get_spikeIn_input
 	output:
 		"results/scaling_factors/individual_scaling_factors.tsv"
+		"results/scaling_factors/merged_scaling_factors.tsv"
 	conda:
 		"../envs/zscore_normalize_bw.yaml"
 	script:
 		"../scripts/compute_scaling_factors.R"
 
 
-# 	rule spikeIn_normalize_bigwigs:
-# 		input:
-# 			bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
-# 		output:
-# 			"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
-# 		conda:
-# 			"../envs/zscore_normalize_bw.yaml"
-# 		script:
-# 			"../scripts/spikeIn_normalize_bw.R"
+	rule spikeIn_normalize_ind_bigwigs:
+		input:
+			bw="results/bigwigs/zscore_normalized/individual/{sample}.bw"
+			scaling_factors="results/scaling_factors/individual_scaling_factors.tsv"
+		output:
+			"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
+		conda:
+			"../envs/zscore_normalize_bw.yaml"
+		script:
+			"../scripts/spikeIn_normalize_bw.R"
+
+	rule spikeIn_normalize_merged_bigwigs:
+		input:
+			bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
+			scaling_factors="results/scaling_factors/merged_scaling_factors.tsv"
+		output:
+			"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
+		conda:
+			"../envs/zscore_normalize_bw.yaml"
+		script:
+			"../scripts/spikeIn_normalize_bw.R"
