@@ -86,24 +86,24 @@ rule compute_scaling_factors:
 		"../scripts/compute_scaling_factors.R"
 
 
-	rule spikeIn_normalize_ind_bigwigs:
-		input:
-			bw="results/bigwigs/zscore_normalized/individual/{sample}.bw"
-			scaling_factors="results/scaling_factors/individual_scaling_factors.tsv"
-		output:
-			"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
-		conda:
-			"../envs/zscore_normalize_bw.yaml"
-		script:
-			"../scripts/spikeIn_normalize_bw.R"
+rule spikeIn_normalize_ind_bigwigs:
+	input:
+		bw="results/bigwigs/zscore_normalized/individual/{sample}.bw"
+		scaling_factors="results/scaling_factors/individual_scaling_factors.tsv"
+	output:
+		"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
+	conda:
+		"../envs/zscore_normalize_bw.yaml"
+	script:
+		"../scripts/spikeIn_normalize_bw.R"
 
-	rule spikeIn_normalize_merged_bigwigs:
-		input:
-			bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
-			scaling_factors="results/scaling_factors/merged_scaling_factors.tsv"
-		output:
-			"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
-		conda:
-			"../envs/zscore_normalize_bw.yaml"
-		script:
-			"../scripts/spikeIn_normalize_bw.R"
+rule spikeIn_normalize_merged_bigwigs:
+	input:
+		bw="results/bigwigs/zscore_normalized/merged/{sample}.bw"
+		scaling_factors="results/scaling_factors/merged_scaling_factors.tsv"
+	output:
+		"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
+	conda:
+		"../envs/zscore_normalize_bw.yaml"
+	script:
+		"../scripts/spikeIn_normalize_bw.R"
