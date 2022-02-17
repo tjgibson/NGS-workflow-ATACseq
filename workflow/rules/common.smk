@@ -156,6 +156,25 @@ def get_final_output():
 				)
 			)
 
+	# spikeIn-normalized bigwigs for individual replicates
+	final_output.extend(expand(
+					[
+						"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
+					],
+					sample = units["sample_name"]
+				)
+			)
+
+	# spikeIn-normalized bigwigs for merged replicates
+	final_output.extend(expand(
+					[
+						"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
+					],
+					sample = units["sample_group"]
+				)
+			)
+
+
 	 # peaks
 	if any(units["call_peaks"]):
 	 
