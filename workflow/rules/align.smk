@@ -41,3 +41,31 @@ rule bowtie2_align:
 	threads: 8  # Use at least two threads
 	wrapper:
 		"0.77.0/bio/bowtie2/align"
+
+rule samtools_sort:
+    input:
+       "results/aligned_reads/mapped/{sample}.bam"
+    output:
+        temp("results/aligned_reads/sorted/{sample}.bam")
+    log:
+        "logs/samtools_sort/{sample}.log"
+    params:
+        extra = "",
+    threads:  # Samtools takes additional threads through its option -@
+        8     # This value - 1 will be sent to -@.
+    wrapper:
+        "0.77.0/bio/samtools/sort"
+        
+rule samtools_index_aligned:
+    input:
+        "results/aligned_reads/sorted/{sample}.bam"
+    output:
+        temp("results/aligned_reads/sorted/{sample}.bam.bai")
+    log:
+        "logs/samtools_index/{sample}.log"
+    params:
+        "" # optional params string
+    threads:  # Samtools takes additional threads through its option -@
+        4     # This value - 1 will be sent to -@
+    wrapper:
+        "0.77.0/bio/samtools/index"

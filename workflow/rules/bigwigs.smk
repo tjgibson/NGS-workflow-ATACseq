@@ -1,7 +1,7 @@
 rule make_bigwigs_ind:
 	input:
-		bam = "results/aligned_reads/sorted/{sample}.bam",
-		bai = "results/aligned_reads/sorted/{sample}.bam.bai"
+		bam = "results/aligned_reads/filtered/{sample}.bam",
+		bai = "results/aligned_reads/filtered/{sample}.bam.bai"
 	output:
 		temp("results/bigwigs/coverage/individual/{sample}.bw")
 	conda:

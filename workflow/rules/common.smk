@@ -74,7 +74,7 @@ def get_bam_merge(wildcards):
 	unit =  units[units["sample_group"] == wildcards.sample_group]
 	group = unit["sample_name"]
 	return expand(
-		"results/aligned_reads/sorted/{group}.bam", group=group)
+		"results/aligned_reads/filtered/{group}.bam", group=group)
 
 
 def get_macs2_input_narrow_se(wildcards):
@@ -83,9 +83,9 @@ def get_macs2_input_narrow_se(wildcards):
 		if all(unit["read_format"] == "SE"):
 			if all(unit["peak_type"] == "narrow"):
 				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam"}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
 				else:
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam", "control": "results/aligned_reads/sorted/{input}.bam".format(input=unit.iloc[0].input)}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
 def get_macs2_input_broad_se(wildcards):
 	unit = units.loc[wildcards.sample]
@@ -93,9 +93,9 @@ def get_macs2_input_broad_se(wildcards):
 		if all(unit["read_format"] == "SE"):
 			if all(unit["peak_type"] == "broad"):
 				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam"}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
 				else:
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam", "control": "results/aligned_reads/sorted/{input}.bam".format(input=unit.iloc[0].input)}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
 def get_macs2_input_narrow_pe(wildcards):
 	unit = units.loc[wildcards.sample]
@@ -103,9 +103,9 @@ def get_macs2_input_narrow_pe(wildcards):
 		if all(unit["read_format"] == "PE"):
 			if all(unit["peak_type"] == "narrow"):
 				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam"}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
 				else:
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam", "control": "results/aligned_reads/sorted/{input}.bam".format(input=unit.iloc[0].input)}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
 def get_macs2_input_broad_pe(wildcards):
 	unit = units.loc[wildcards.sample]
@@ -113,10 +113,19 @@ def get_macs2_input_broad_pe(wildcards):
 		if all(unit["read_format"] == "PE"):
 			if all(unit["peak_type"] == "broad"):
 				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam"}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
 				else:
-					return {"treatment": "results/aligned_reads/sorted/{sample}.bam", "control": "results/aligned_reads/sorted/{input}.bam".format(input=unit.iloc[0].input)}
+					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
+def get_spikeIn_input():
+	stat_files = expand(
+                    [
+                        "results/aligned_reads/stats/{sample}_unireads.idxstats"
+                    ],
+                    sample = units["sample_name"]
+                )
+    return stat_files
+                
 def get_final_output():
 	final_output = []
 
