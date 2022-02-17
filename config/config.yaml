@@ -7,7 +7,7 @@ units: config/units.tsv
 
 # optional inclusion of certain rules -------------------------------------------------------
 mergeReads:
-  activate: True
+  activate: False
 
 # text file containing list of chromosomes to keep when filtering ---------------------------
 filter_chroms: True

@@ -118,7 +118,7 @@ def get_macs2_input_broad_pe(wildcards):
 					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
 
-def get_spikeIn_input():
+def get_spikeIn_input(wildcards):
 	stat_files = expand(
 				["results/aligned_reads/stats/{sample}_unireads.idxstats"],
 				sample = units["sample_name"]
