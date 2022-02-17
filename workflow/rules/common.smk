@@ -119,11 +119,9 @@ def get_macs2_input_broad_pe(wildcards):
 
 def get_spikeIn_input():
 	stat_files = expand(
-					[
-						"results/aligned_reads/stats/{sample}_unireads.idxstats"
-					],
-					sample = units["sample_name"]
-				)
+				["results/aligned_reads/stats/{sample}_unireads.idxstats"],
+				sample = units["sample_name"]
+			)
     return stat_files
                 
 def get_final_output():
