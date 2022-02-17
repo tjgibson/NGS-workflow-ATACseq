@@ -78,7 +78,7 @@ rule compute_scaling_factors:
 	input:
 		mapping_stats=get_spikeIn_input
 	output:
-		"results/scaling_factors/individual_scaling_factors.tsv"
+		"results/scaling_factors/individual_scaling_factors.tsv",
 		"results/scaling_factors/merged_scaling_factors.tsv"
 	conda:
 		"../envs/zscore_normalize_bw.yaml"
