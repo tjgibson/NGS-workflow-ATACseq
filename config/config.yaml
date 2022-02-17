@@ -14,7 +14,6 @@ filter_chroms: True
 keep_chroms: config/keep_chroms.txt
 
 # reference genome options ------------------------------------------------------------------
-use_spikeIn: False
 ref_genome:
   name: dm6
   link: https://hgdownload.soe.ucsc.edu/goldenPath/dm6/bigZips/dm6.fa.gz
