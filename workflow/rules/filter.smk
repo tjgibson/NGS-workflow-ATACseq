@@ -12,7 +12,7 @@ rule samtools_idxstats_unfiltered:
 if config["filter_chroms"]:
 	rule filter_multireads:
 		input:
-			"results/aligned_reads/mapped/{sample}.bam"
+			"results/aligned_reads/sorted/{sample}.bam"
 		output:
 			temp("results/aligned_reads/unireads/{sample}.bam")
 		log:
@@ -62,7 +62,7 @@ if config["filter_chroms"]:
 else:
 	rule filter_multireads:
 		input:
-			"results/aligned_reads/mapped/{sample}.bam"
+			"results/aligned_reads/sorted/{sample}.bam"
 		output:
 			temp("results/aligned_reads/filtered/{sample}.bam")
 		log:
