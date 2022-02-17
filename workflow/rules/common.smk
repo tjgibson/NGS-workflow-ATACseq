@@ -122,8 +122,9 @@ def get_spikeIn_input():
 				["results/aligned_reads/stats/{sample}_unireads.idxstats"],
 				sample = units["sample_name"]
 			)
-    return stat_files
-                
+	return stat_files
+
+
 def get_final_output():
 	final_output = []
 
