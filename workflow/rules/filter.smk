@@ -37,15 +37,15 @@ if config["filter_chroms"]:
 			"0.77.0/bio/samtools/index"
 	
 	rule samtools_idxstats_unireads:
-	input:
-		bam="results/aligned_reads/unireads/{sample}.bam",
-		idx="results/aligned_reads/unireads/{sample}.bam.bai"
-	output:
-		"results/aligned_reads/stats/{sample}_unireads.idxstats"
-	log:
-		"logs/samtools/idxstats/{sample}.log"
-	wrapper:
-		"0.77.0/bio/samtools/idxstats"
+		input:
+			bam="results/aligned_reads/unireads/{sample}.bam",
+			idx="results/aligned_reads/unireads/{sample}.bam.bai"
+		output:
+			"results/aligned_reads/stats/{sample}_unireads.idxstats"
+		log:
+			"logs/samtools/idxstats/{sample}.log"
+		wrapper:
+			"0.77.0/bio/samtools/idxstats"
 	
 	rule filter_chroms:
 		input:
