@@ -41,7 +41,7 @@ if config["use_spikeIn"]:
 		shell:
 			"""
 			seqkit replace -p "(.+)" -r "spikeIn_\$1" -o resources/tmp_spikeIn.fasta.gz {input.spikeIn} 2> {log}
-			zcat {input.ref} resources/tmp_spikeIn.fasta.gz | gzip > {output} 2>> {log}
+			cat {input.ref} resources/tmp_spikeIn.fasta.gz > {output} 2>> {log}
 			rm resources/tmp_spikeIn.fasta.gz
 			"""
 else:
