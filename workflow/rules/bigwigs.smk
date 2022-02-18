@@ -22,7 +22,7 @@ rule merge_bam:
 	threads:  # Samtools takes additional threads through its option -@
 		8     # This value - 1 will be sent to -@
 	wrapper:
-		"1.1.0/bio/samtools/merge"		
+		"v1.1.0/bio/samtools/merge"		
 
 rule samtools_index_merged:
     input:
@@ -36,7 +36,7 @@ rule samtools_index_merged:
     threads:  # Samtools takes additional threads through its option -@
         4     # This value - 1 will be sent to -@
     wrapper:
-        "1.1.0/bio/samtools/index"
+        "v1.1.0/bio/samtools/index"
         
 rule make_bigwigs_merged:
 	input:

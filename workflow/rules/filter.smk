@@ -7,7 +7,7 @@ rule samtools_idxstats_unfiltered:
 	log:
 		"logs/samtools/idxstats/{sample}.log"
 	wrapper:
-		"1.1.0/bio/samtools/idxstats" 
+		"v1.1.0/bio/samtools/idxstats" 
 
 if config["filter_chroms"]:
 	rule filter_multireads:
@@ -20,7 +20,7 @@ if config["filter_chroms"]:
 		params:
 			extra="-bh -q 30" # optional params string
 		wrapper:
-			"1.1.0/bio/samtools/view"
+			"v1.1.0/bio/samtools/view"
 	
 	rule samtools_index_unireads:
 		input:
@@ -34,7 +34,7 @@ if config["filter_chroms"]:
 		threads:  # Samtools takes additional threads through its option -@
 			4     # This value - 1 will be sent to -@
 		wrapper:
-			"1.1.0/bio/samtools/index"
+			"v1.1.0/bio/samtools/index"
 	
 	rule samtools_idxstats_unireads:
 		input:
@@ -45,7 +45,7 @@ if config["filter_chroms"]:
 		log:
 			"logs/samtools/idxstats/{sample}.log"
 		wrapper:
-			"1.1.0/bio/samtools/idxstats"
+			"v1.1.0/bio/samtools/idxstats"
 	
 	rule filter_chroms:
 		input:
@@ -58,7 +58,7 @@ if config["filter_chroms"]:
 		params:
 			extra="-bh -L resources/keep_chroms.bed" # optional params string
 		wrapper:
-			"1.1.0/bio/samtools/view"
+			"v1.1.0/bio/samtools/view"
 else:
 	rule filter_multireads:
 		input:
@@ -70,7 +70,7 @@ else:
 		params:
 			extra="-bh -q 30" # optional params string
 		wrapper:
-			"1.1.0/bio/samtools/view"
+			"v1.1.0/bio/samtools/view"
 		
 
 rule samtools_index_filtered:
@@ -85,7 +85,7 @@ rule samtools_index_filtered:
     threads:  # Samtools takes additional threads through its option -@
         4     # This value - 1 will be sent to -@
     wrapper:
-        "1.1.0/bio/samtools/index"
+        "v1.1.0/bio/samtools/index"
 
 rule samtools_idxstats_filtered:
 	input:
@@ -96,6 +96,6 @@ rule samtools_idxstats_filtered:
 	log:
 		"logs/samtools/idxstats/{sample}.log"
 	wrapper:
-		"1.1.0/bio/samtools/idxstats" 
+		"v1.1.0/bio/samtools/idxstats" 
 
 # rule summarize_read_processing:
