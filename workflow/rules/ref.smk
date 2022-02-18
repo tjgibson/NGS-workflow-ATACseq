@@ -88,5 +88,5 @@ rule bowtie2_index:
 		extra="" # optional parameters
 	threads: 8
 	wrapper:
-		"0.77.0/bio/bowtie2/build"
+		"1.1.0/bio/bowtie2/build"
 		

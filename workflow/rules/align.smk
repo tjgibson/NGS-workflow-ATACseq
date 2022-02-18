@@ -4,7 +4,7 @@ rule get_sra_se:
 	log:
 		"logs/get_sra/{accession}.log",
 	wrapper:
-		"0.77.0/bio/sra-tools/fasterq-dump"
+		"1.1.0/bio/sra-tools/fasterq-dump"
                 
 rule get_sra_pe:
 	output:
@@ -13,7 +13,7 @@ rule get_sra_pe:
 	log:
 		"logs/get_sra/{accession}.log",
 	wrapper: 
-		"0.77.0/bio/sra-tools/fasterq-dump"
+		"1.1.0/bio/sra-tools/fasterq-dump"
         
 rule merge_fastqs:
     input:
@@ -40,7 +40,7 @@ rule bowtie2_align:
 		extra=config["params"]["bowtie2_align"]   # optional parameters
 	threads: 8  # Use at least two threads
 	wrapper:
-		"0.77.0/bio/bowtie2/align"
+		"1.1.0/bio/bowtie2/align"
 
 rule samtools_sort:
     input:
@@ -54,7 +54,7 @@ rule samtools_sort:
     threads:  # Samtools takes additional threads through its option -@
         8     # This value - 1 will be sent to -@.
     wrapper:
-        "0.77.0/bio/samtools/sort"
+        "1.1.0/bio/samtools/sort"
         
 rule samtools_index_aligned:
     input:
@@ -68,4 +68,4 @@ rule samtools_index_aligned:
     threads:  # Samtools takes additional threads through its option -@
         4     # This value - 1 will be sent to -@
     wrapper:
-        "0.77.0/bio/samtools/index"
+        "1.1.0/bio/samtools/index"
