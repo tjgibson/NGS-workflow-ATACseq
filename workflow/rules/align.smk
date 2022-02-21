@@ -4,7 +4,7 @@ rule get_sra_se:
 	log:
 		"logs/get_sra/{accession}.log",
 	wrapper:
-		"1.1.0/bio/sra-tools/fasterq-dump"
+		"v1.1.0/bio/sra-tools/fasterq-dump"
                 
 rule get_sra_pe:
 	output:
