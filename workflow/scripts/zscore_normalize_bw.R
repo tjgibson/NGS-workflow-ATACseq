@@ -4,9 +4,20 @@ zscore_bw <- function(bw) {
   require(rtracklayer)
   require(GenomicRanges)
   
+  # import bigwig file to Granges
   if (typeof(bw) == "character") {
     message("reading bigwig file")
     bw <- import(bw)
+  }
+  
+  ## FOR TESTING ##
+  print(paste("use_spikeIn in config = ",snakemake.config["use_spikeIn"]))
+  
+  # if using a spike-in, filter the seqlevels to only the reference genome
+  if (snakemake.config["use_spikeIn"] == "True") {
+    message("removing spikeIn chromosomes")
+    ref_chroms <- seqlevels(bw)[!grepl("spikeIn_", seqlevels(bw))]
+    bw <- keepSeqlevels(bw, ref_chroms, pruning.mode = "coarse")
   }
   
   # for large regions with the same score, expand into equal sized bins
