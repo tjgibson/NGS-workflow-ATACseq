@@ -10,9 +10,6 @@ zscore_bw <- function(bw) {
     bw <- import(bw)
   }
   
-  ## FOR TESTING ##
-  print(paste("use_spikeIn in config = ",snakemake@config[["use_spikeIn"]]))
-  
   # if using a spike-in, filter the seqlevels to only the reference genome
   if (snakemake@config[["use_spikeIn"]]) {
     message("removing spikeIn chromosomes")

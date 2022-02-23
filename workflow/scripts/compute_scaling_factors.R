@@ -2,27 +2,6 @@
 # load required packages
 library(tidyverse)
 
-## FOR TESTING ONLY ##
-test_mapping_input <- fs::dir_ls("../2021_Gaskill_Gibson/data/2020_11_MG_CHIPseq/analysis_w_spike_in/summary_files/", regexp = "filtered[.]stats$")
-
-mapping_stats <- test_mapping_input %>%
-  map_dfr(read_tsv, .id = "source", col_names = c("chromosome", "chromosome_size", "mapped_reads", "unmapped_reads")) %>%
-  mutate(sample_name = basename(source)) %>% 
-  mutate(sample_name = gsub("_filtered.stats", "", sample_name))
-
-mapping_stats <- mapping_stats %>%
-  mutate(reference_genome = case_when(!str_detect(chromosome, "chr")  ~ "spikeIn",
-                                      str_detect(chromosome, "chr")  ~ "reference")) 
-
-
-sample_table <- "../NGS_workflows/snakemake_test/test_sample_table.tsv" %>% 
-  read_tsv() %>% 
-  
-  # remove redundant technical replicates from sample_table
-  distinct(sample_name, .keep_all = TRUE)
-  
-  ######################
-
 # import data ------------------------------------------------------------------
 # read in all relevant stat files
 mapping_stats <- snakemake@input[["mapping_stats"]] %>%
