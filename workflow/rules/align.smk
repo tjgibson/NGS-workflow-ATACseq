@@ -1,19 +1,23 @@
 rule get_sra_se:
 	output:
 		temp("data/sra/se/{accession}.fastq.gz"),
+	conda:
+		"../envs/sratools.yaml"
 	log:
 		"logs/get_sra/{accession}.log",
-	wrapper:
-		"v1.1.0/bio/sra-tools/fasterq-dump"
+	script:
+			"../scripts/fasterq-dump.py"
                 
 rule get_sra_pe:
 	output:
 		temp("data/sra/pe/{accession}_1.fastq.gz"),
 		temp("data/sra/pe/{accession}_2.fastq.gz"),
+	conda:
+		"../envs/sratools.yaml"
 	log:
 		"logs/get_sra/{accession}.log",
-	wrapper: 
-		"0.77.0/bio/sra-tools/fasterq-dump"
+	script:
+			"../scripts/fasterq-dump.py"
         
 rule merge_fastqs:
     input:
