@@ -13,7 +13,7 @@ rule get_sra_pe:
 	log:
 		"logs/get_sra/{accession}.log",
 	wrapper: 
-		"v1.1.0/bio/sra-tools/fasterq-dump"
+		"0.77.0/bio/sra-tools/fasterq-dump"
         
 rule merge_fastqs:
     input:
