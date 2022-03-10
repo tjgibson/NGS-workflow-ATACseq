@@ -52,7 +52,7 @@ if config["filter_chroms"]:
 			bam="results/aligned_reads/unireads/{sample}.bam",
 			keep_chroms="resources/keep_chroms.bed"
 		output:
-			temp("results/aligned_reads/filtered/{sample}.bam")
+			"results/aligned_reads/filtered/{sample}.bam"
 		log:
 			"logs/filter_chroms/{sample}.log"
 		params:
@@ -64,7 +64,7 @@ else:
 		input:
 			"results/aligned_reads/sorted/{sample}.bam"
 		output:
-			temp("results/aligned_reads/filtered/{sample}.bam")
+			"results/aligned_reads/filtered/{sample}.bam"
 		log:
 			"logs/filter_multireads/{sample}.log"
 		params:
