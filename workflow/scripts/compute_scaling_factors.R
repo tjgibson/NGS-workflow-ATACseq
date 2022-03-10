@@ -4,10 +4,13 @@ library(tidyverse)
 
 # import data ------------------------------------------------------------------
 # read in all relevant stat files
-mapping_stats <- snakemake@input[["mapping_stats"]] %>%
+stat_files <- snakemake@input[["mapping_stats"]]
+names(stat_files) <- stat_files
+
+mapping_stats <- stat_files %>%
   map_dfr(read_tsv, .id = "source", col_names = c("chromosome", "chromosome_size", "mapped_reads", "unmapped_reads")) %>%
-  mutate(sample_name = basename(source)) %>% 
-  mutate(sample = gsub(".idxstats", "", sample_name))
+  mutate(sample_name = gsub("_unireads.idxstats", "", basename(source)))
+
 
 # add column marking reference or spike-in chromosomes
 mapping_stats <- mapping_stats %>%
