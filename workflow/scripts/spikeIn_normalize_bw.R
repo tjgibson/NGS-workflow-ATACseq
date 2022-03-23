@@ -1,7 +1,6 @@
 # setup --------------------------------------------------------------------------------------------------------
 library(GenomicRanges)
 library(rtracklayer)
-# library(BSgenome.Dmelanogaster.UCSC.dm6)
 library(tidyverse)
 
 # import data --------------------------------------------------------------------------------------------------
@@ -14,6 +13,18 @@ scaling_factors <- read_tsv(snakemake@input[["scaling_factors"]])
 # get sample name to use for finding the correct scaling factor
 file_bn <- gsub(".bw", "", basename(bw))
 
+## for testing only ##
+print("bw variable:")
+type(bw)
+str(bw)
+print(bw)
+print(" ")
+
+print("scaling_factors variable:")
+type(scaling_factors)
+str(scaling_factors)
+print(scaling_factors)
+print(" ")
 # rescale bigwig file based on spike-in normalization factor ---------------------------------------------------
 
 # get scaling factor
@@ -29,11 +40,10 @@ scaled.gr <- import(bw) %>%
   mutate(score = score * scaling_factor) %>%
   makeGRangesFromDataFrame(keep.extra.columns = TRUE)
 
+# set seqinfo of normalized bigwigs
+seqlevels(scaled.gr) <- seqlevels(BigWigFile(bw))
+seqinfo(scaled.gr) <- seqinfo(BigWigFile(bw))
 
-# seqinfo <- seqinfo(BSgenome.Dmelanogaster.UCSC.dm6)
-# keepers <- seqlevels(BSgenome.Dmelanogaster.UCSC.dm6)[seqlevels(BSgenome.Dmelanogaster.UCSC.dm6) %in% seqlevels(scaled.gr)]
-# seqinfo <- keepSeqlevels(seqinfo, keepers)
-# seqinfo(scaled.gr) <- seqinfo
 
 # export normalized bigwig -----------------------------------------------------
 export(scaled.gr, snakemake@output[["bw"]], format = "bw")
