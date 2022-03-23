@@ -24,7 +24,7 @@ scaling_factor <- scaling_factors %>%
 
 
 # normalize bigwig
-scaled.gr <- import(i) %>%
+scaled.gr <- import(bw) %>%
   as.data.frame() %>%
   mutate(score = score * scaling_factor) %>%
   makeGRangesFromDataFrame(keep.extra.columns = TRUE)
