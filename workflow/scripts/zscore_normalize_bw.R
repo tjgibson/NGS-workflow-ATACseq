@@ -1,4 +1,9 @@
 # setup -----------------------------------------------------------------------
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rtracklayer))
+suppressPackageStartupMessages(library(GenomicRanges))
+              
+
 zscore_bw <- function(bw) {
   require(tidyverse)
   require(rtracklayer)
