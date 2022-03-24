@@ -129,13 +129,13 @@ def get_ind_spikeIn_input(wildcards):
 	unit=units.loc[wildcards.sample]
 	if all(unit["call_peaks"]):
 		bw = "results/bigwigs/zscore_normalized/individual/{sample}.bw"
-	return bw
+		return bw
 
 def get_merged_spikeIn_input(wildcards):
 	unit =  units[units["sample_group"] == wildcards.sample]
 	if all(unit["call_peaks"]):
 		bw = "results/bigwigs/zscore_normalized/merged/{sample}.bw"
-	return bw
+		return bw
 
 
 def get_final_output():
