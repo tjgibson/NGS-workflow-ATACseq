@@ -126,21 +126,15 @@ def get_scaling_input(wildcards):
 	return stat_files
 
 def get_ind_spikeIn_input(wildcards):
-	IP_samples=units[units["call_peaks"]]
-	
-	bw = expand(
-				["results/bigwigs/zscore_normalized/individual/{sample}.bw"],
-				sample = IP_samples["sample_name"]
-			)
+	unit=units.loc[wildcards.sample]
+	if unit["call_peaks"]:
+		bw = "results/bigwigs/zscore_normalized/individual/{sample}.bw"
 	return bw
 
 def get_merged_spikeIn_input(wildcards):
-	IP_samples=units[units["call_peaks"]]
-	
-	bw = expand(
-				["results/bigwigs/zscore_normalized/merged/{sample}.bw"],
-				sample = IP_samples["sample_group"]
-			)
+	unit =  units[units["sample_group"] == wildcards.sample]
+	if unit["call_peaks"]:
+		bw = "results/bigwigs/zscore_normalized/merged/{sample}.bw"
 	return bw
 
 
