@@ -72,7 +72,7 @@ if config["filter_chroms"]:
 		shell:
 			"seqkit grep -f {input.keep_chroms} {input.genome}"
 			" | seqkit fx2tab -nil"
-			" | awk '{{print $1, 1, $2}}' > {output}"
+			" |  awk -v OFS='\t' '{print $1, 0, $2}' > {output}"
 				
 rule bowtie2_index:
 	input:

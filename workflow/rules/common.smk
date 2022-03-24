@@ -118,12 +118,30 @@ def get_macs2_input_broad_pe(wildcards):
 					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
 
-def get_spikeIn_input(wildcards):
+def get_scaling_input(wildcards):
 	stat_files = expand(
 				["results/aligned_reads/stats/{sample}_unireads.idxstats"],
 				sample = units["sample_name"]
 			)
 	return stat_files
+
+def get_ind_spikeIn_input(wildcards):
+	IP_samples=units[units["call_peaks"]]
+	
+	bw = expand(
+				["results/bigwigs/zscore_normalized/individual/{sample}.bw"],
+				sample = IP_samples["sample_name"]
+			)
+	return bw
+
+def get_merged_spikeIn_input(wildcards):
+	IP_samples=units[units["call_peaks"]]
+	
+	bw = expand(
+				["results/bigwigs/zscore_normalized/merged/{sample}.bw"],
+				sample = IP_samples["sample_group"]
+			)
+	return bw
 
 
 def get_final_output():
