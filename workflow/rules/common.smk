@@ -172,7 +172,7 @@ def get_final_output():
 						[
 							"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
 						],
-						sample = units["sample_name"]
+						sample = units.loc[units["call_peaks"],["sample_name"]]
 					)
 				)
 
@@ -181,7 +181,7 @@ def get_final_output():
 						[
 							"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
 						],
-						sample = units["sample_group"]
+						sample = units.loc[units["call_peaks"],["sample_group"]]
 					)
 				)
 
