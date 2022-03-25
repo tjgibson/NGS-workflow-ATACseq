@@ -157,6 +157,16 @@ def get_final_output():
 				)
 			)
 	
+		# z-score normalized bigwigs for individual replicates
+	final_output.extend(expand(
+					[
+						"results/bigwigs/zscore_normalized/individual/{sample}.bw"
+					],
+					sample = units["sample_name"]
+				)
+			)
+
+	
 	# z-score normalized bigwigs for merged replicates
 	final_output.extend(expand(
 					[
@@ -172,7 +182,7 @@ def get_final_output():
 						[
 							"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
 						],
-						sample = units.loc[units["call_peaks"],["sample_name"]]
+						sample = units.loc[units["call_peaks"],"sample_name"]
 					)
 				)
 
@@ -181,7 +191,7 @@ def get_final_output():
 						[
 							"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
 						],
-						sample = units.loc[units["call_peaks"],["sample_group"]]
+						sample = units.loc[units["call_peaks"],"sample_group"]
 					)
 				)
 

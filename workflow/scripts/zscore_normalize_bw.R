@@ -22,6 +22,14 @@ zscore_bw <- function(bw) {
     bw <- keepSeqlevels(bw, ref_chroms, pruning.mode = "coarse")
   }
   
+  if (snakemake@config[["filter_chroms"]]) {
+    message("filtering reference chromosomes")
+    keep_chroms <- read_tsv(snakemake@config[["keep_chroms"]], col_names = c("chromosome"))
+    ref_chroms <- seqlevels(bw)[seqlevels(bw) %in% keep_chroms$chromosome]
+    bw <- keepSeqlevels(bw, ref_chroms, pruning.mode = "coarse")
+  }
+  
+  
   # for large regions with the same score, expand into equal sized bins
   message("binning genome")
   min_binsize <- min(width(bw))
