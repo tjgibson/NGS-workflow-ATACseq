@@ -32,6 +32,6 @@ spikeIn_genome:
 params:
   bowtie2_index: ""
   bowtie2_align: "-k 2 --very-sensitive --no-mixed --no-discordant -X 5000"
-#   filter_multireads: "-bh -q 30"
+  filter_multireads: "-f bam -F '(mapping_quality >= 50) and ([XS:i] == null)'" 
   bigwigs_ind: "--binSize 10"
   bigwigs_merged: "--binSize 10"

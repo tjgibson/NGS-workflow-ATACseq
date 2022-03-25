@@ -18,9 +18,9 @@ if config["filter_chroms"]:
 		log:
 			"logs/filter_multireads/{sample}.log"
 		params:
-			extra="-bh -q 30" # optional params string
+			extra=config["params"]["filter_multireads"] 
 		wrapper:
-			"v1.1.0/bio/samtools/view"
+			"v1.1.0/bio/sambamba/view"
 	
 	rule samtools_index_unireads:
 		input:
@@ -68,9 +68,9 @@ else:
 		log:
 			"logs/filter_multireads/{sample}.log"
 		params:
-			extra="-bh -q 30" # optional params string
+			extra=config["params"]["filter_multireads"] 
 		wrapper:
-			"v1.1.0/bio/samtools/view"
+			"v1.1.0/bio/sambamba/view"
 		
 
 rule samtools_index_filtered:
