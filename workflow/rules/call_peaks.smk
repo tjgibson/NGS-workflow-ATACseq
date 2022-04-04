@@ -10,7 +10,7 @@ rule macs2_call_peaks_narrow_se:
                  )
 	log: 
 		"logs/macs2/callpeak_narrow_{sample}.log"
-	params: "-f BAM -g dm"
+	params: config["params"]["macs2_call_peaks_narrow_se"]
 	wrapper:
 		"v1.1.0/bio/macs2/callpeak"
 
@@ -26,7 +26,7 @@ rule macs2_call_peaks_broad_se:
                  )
 	log:
 		"logs/macs2/callpeak_broad_{sample}.log"
-	params: "-f BAM -g dm"
+	params: config["params"]["macs2_call_peaks_broad_se"]
 	wrapper:
 		"v1.1.0/bio/macs2/callpeak"
 
@@ -42,7 +42,7 @@ rule macs2_call_peaks_narrow_pe:
                  )
 	log: 
 		"logs/macs2/callpeak_narrow_{sample}.log"
-	params: "-f BAMPE -g dm"
+	params: config["params"]["macs2_call_peaks_narrow_pe"]
 	wrapper:
 		"v1.1.0/bio/macs2/callpeak"
 
@@ -58,7 +58,7 @@ rule macs2_call_peaks_broad_pe:
                  )
 	log:
 		"logs/macs2/callpeak_broad_{sample}.log"
-	params: "-f BAMPE -g dm"
+	params: config["params"]["macs2_call_peaks_broad_pe"]
 	wrapper:
 		"v1.1.0/bio/macs2/callpeak"
 
