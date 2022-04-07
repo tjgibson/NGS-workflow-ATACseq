@@ -72,7 +72,7 @@ def get_bowtie2_input(wildcards):
 
 def get_bam_merge(wildcards):
 	unit =  units[units["sample_group"] == wildcards.sample_group]
-	group = unit["sample_name"]
+	group = pd.unique(unit["sample_name"])
 	return expand(
 		"results/aligned_reads/filtered/{group}.bam", group=group)
 
