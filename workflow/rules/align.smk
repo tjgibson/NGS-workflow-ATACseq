@@ -5,6 +5,7 @@ rule get_sra_se:
 		"../envs/sratools.yaml"
 	log:
 		"logs/get_sra/{accession}.log",
+	threads: 2
 	script:
 			"../scripts/fasterq-dump.py"
                 
@@ -16,6 +17,7 @@ rule get_sra_pe:
 		"../envs/sratools.yaml"
 	log:
 		"logs/get_sra/{accession}.log",
+	threads: 2
 	script:
 			"../scripts/fasterq-dump.py"
         
