@@ -56,7 +56,7 @@ if config["filter_chroms"]:
 		log:
 			"logs/filter_chroms/{sample}.log"
 		params:
-			extra="-bh -L resources/keep_chroms.bed" # optional params string
+			extra="-bh -L {input.keep_chroms}" # optional params string
 		wrapper:
 			"v1.1.0/bio/samtools/view"
 else:
