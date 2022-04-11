@@ -55,10 +55,10 @@ if config["filter_chroms"]:
 			"results/aligned_reads/filtered/{sample}.bam"
 		log:
 			"logs/filter_chroms/{sample}.log"
-		params:
-			extra="-bh -L {input.keep_chroms}" # optional params string
-		wrapper:
-			"v1.1.0/bio/samtools/view"
+		conda:
+			"../envs/samtools.yaml"
+		shell:
+			"samtools view -bh -L {input.keep_chroms} {input.bam} 2>> {log}"
 else:
 	rule filter_multireads:
 		input:
