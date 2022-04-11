@@ -58,7 +58,7 @@ if config["filter_chroms"]:
 		conda:
 			"../envs/samtools.yaml"
 		shell:
-			"samtools view -bh -L {input.keep_chroms} {input.bam} 2>> {log}"
+			"samtools view -bh -L {input.keep_chroms} --output-fmt BAM -o {output} {input.bam} 2>> {log}"
 else:
 	rule filter_multireads:
 		input:
