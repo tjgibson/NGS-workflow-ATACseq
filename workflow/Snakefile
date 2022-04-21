@@ -21,6 +21,7 @@ container: "docker://continuumio/miniconda3"
 ##### load rules #####
 include: "rules/common.smk"
 include: "rules/ref.smk"
+include: "rules/trim.smk"
 include: "rules/align.smk"
 include: "rules/filter.smk"
 include: "rules/bigwigs.smk"

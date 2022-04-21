@@ -1,26 +1,13 @@
 import pandas as pd
 
 
-# def get_genome_fn():
-# 	if config["use_spikeIn"]:
-# 		return "resources/genome.fasta"
-# 	else:
-# 		return "resources/ref_genome.fasta"
-# 		
-# def get_genome_bn():
-# 	if config["use_spikeIn"]:
-# 		return "resources/genome"
-# 	else:
-# 		return "resources/ref_genome"
 
 # read in table with sample metadata
-# samples = (
-#     pd.read_csv(config["samples"], sep="\t", dtype={"sample_name": str})
-#     .set_index("sample_name", drop=False)
-#     .sort_index()
-# )
-
-
+samples = (
+    pd.read_csv(config["samples"], sep="\t", dtype={"sample_name": str})
+    .set_index("sample_name", drop=False)
+    .sort_index()
+)
 
 units = (
     pd.read_csv(config["units"], sep="\t", dtype={"sample_name": str, "unit_name": str})
@@ -51,23 +38,18 @@ def get_fq_merge(wildcards):
 	return units.loc[wildcards.sample, fq].tolist()
 
 
-def get_bowtie2_input(wildcards):
+def get_NGmerge_input(wildcards):
 	if not is_activated("mergeReads"):
 		unit = units.loc[wildcards.sample]
 		if all(pd.isna(unit["fq1"])):
 			# SRA sample (always paired-end for now)
 			accession = unit["sra"]
-			if all(unit["read_format"] == "SE"):
-				return expand("data/sra/se/{accession}.fastq.gz", accession=accession)
-			else:
+			if all(unit["read_format"] == "PE"):
 				return expand("data/sra/pe/{accession}_{read}.fastq.gz", accession=accession, read=[1,2])
 		fastqs = units.loc[(wildcards.sample, wildcards.unit), ["fq1", "fq2"]].dropna()
 		if len(fastqs) == 2:
 			return [fastqs.fq1, fastqs.fq2]
-		return fastqs.fq1
 	unit = units.loc[wildcards.sample]
-	if all(unit["read_format"] == "SE"):
-		return ["data/merged/{sample}_single.fastq.gz"]
 	return ["data/merged/{sample}_1.fastq.gz", "data/merged/{sample}_2.fastq.gz"]
 
 def get_bam_merge(wildcards):
@@ -77,41 +59,12 @@ def get_bam_merge(wildcards):
 		"results/aligned_reads/filtered/{group}.bam", group=group)
 
 
-def get_macs2_input_narrow_se(wildcards):
-	unit = units.loc[wildcards.sample]
-	if all(unit["call_peaks"]):
-		if all(unit["read_format"] == "SE"):
-			if all(unit["peak_type"] == "narrow"):
-				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
-				else:
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
-
-def get_macs2_input_broad_se(wildcards):
-	unit = units.loc[wildcards.sample]
-	if all(unit["call_peaks"]):
-		if all(unit["read_format"] == "SE"):
-			if all(unit["peak_type"] == "broad"):
-				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
-				else:
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
 
 def get_macs2_input_narrow_pe(wildcards):
 	unit = units.loc[wildcards.sample]
 	if all(unit["call_peaks"]):
 		if all(unit["read_format"] == "PE"):
 			if all(unit["peak_type"] == "narrow"):
-				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
-				else:
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
-
-def get_macs2_input_broad_pe(wildcards):
-	unit = units.loc[wildcards.sample]
-	if all(unit["call_peaks"]):
-		if all(unit["read_format"] == "PE"):
-			if all(unit["peak_type"] == "broad"):
 				if all(pd.isna(unit["input"])):
 					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
 				else:
