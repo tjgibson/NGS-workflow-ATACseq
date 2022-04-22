@@ -24,6 +24,7 @@ include: "rules/ref.smk"
 include: "rules/trim.smk"
 include: "rules/align.smk"
 include: "rules/filter.smk"
+include: "rules/split_fragments.smk"
 include: "rules/bigwigs.smk"
 include: "rules/call_peaks.smk"
 

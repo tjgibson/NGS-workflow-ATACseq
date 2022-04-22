@@ -35,7 +35,7 @@ rule merge_fastqs:
         
 rule bowtie2_align:
 	input:
-		sample=get_bowtie2_input,
+		sample=["data/trimmed/{sample}_1.fastq.gz","data/trimmed/{sample}_2.fastq.gz"],
 		index=rules.bowtie2_index.output
 	output:
 		temp("results/aligned_reads/mapped/{sample}.bam")

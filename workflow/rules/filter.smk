@@ -19,6 +19,7 @@ if config["filter_chroms"]:
 			"logs/filter_multireads/{sample}.log"
 		params:
 			extra=config["params"]["filter_multireads"] 
+		threads: 8
 		wrapper:
 			"v1.1.0/bio/sambamba/view"
 	
@@ -68,7 +69,8 @@ else:
 		log:
 			"logs/filter_multireads/{sample}.log"
 		params:
-			extra=config["params"]["filter_multireads"] 
+			extra=config["params"]["filter_multireads"]
+		threads: 8
 		wrapper:
 			"v1.1.0/bio/sambamba/view"
 		
