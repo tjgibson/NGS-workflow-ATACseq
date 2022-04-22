@@ -4,7 +4,7 @@ rule total_fragments:
 		"results/aligned_reads/filtered/{sample}.bam.bai"
 	output:
 		"results/aligned_reads/split_fragments/{sample}_total.bam",
-		"results/aligned_reads/split_fragments/{sample}.bam.bai"
+		"results/aligned_reads/split_fragments/{sample}_total.bam.bai"
 	log:
 		"logs/split_fragments/{sample}_total.log"
 	shell:
@@ -16,7 +16,7 @@ rule total_fragments:
 rule small_fragments:
 	input:
 		"results/aligned_reads/split_fragments/{sample}_total.bam",
-		"results/aligned_reads/split_fragments/{sample}.bam.bai"
+		"results/aligned_reads/split_fragments/{sample}_total.bam.bai"
 	output:
 		"results/aligned_reads/split_fragments/{sample}_small.bam"
 	log:
@@ -30,7 +30,7 @@ rule small_fragments:
 rule large_fragments:
 	input:
 		"results/aligned_reads/split_fragments/{sample}_total.bam",
-		"results/aligned_reads/split_fragments/{sample}.bam.bai"
+		"results/aligned_reads/split_fragments/{sample}_total.bam.bai"
 	output:
 		"results/aligned_reads/split_fragments/{sample}_large.bam"
 	log:
@@ -45,7 +45,7 @@ rule samtools_index_small_fragments:
     input:
         "results/aligned_reads/split_fragments/{sample}_small.bam"
     output:
-        "results/aligned_reads/split_fragments/{sample}_small.bam"
+        "results/aligned_reads/split_fragments/{sample}_small.bam.bai"
     log:
         "logs/samtools_index/{sample}_small.log"
     params:

@@ -1,9 +1,11 @@
+wildcard_constraints:
+        frag_size="small|large|total"
 rule make_bigwigs_ind:
 	input:
-		bam = "results/aligned_reads/filtered/{sample}.bam",
-		bai = "results/aligned_reads/filtered/{sample}.bam.bai"
+		bam = "results/aligned_reads/split_fragments/{sample}_{frag_size}.bam",
+		bai = "results/aligned_reads/split_fragments/{sample}_{frag_size}.bam.bai"
 	output:
-		temp("results/bigwigs/coverage/individual/{sample}.bw")
+		temp("results/bigwigs/coverage/individual/{sample}_{frag_size}.bw")
 	conda:
 		"../envs/deeptools.yaml"
 	params:
@@ -16,7 +18,7 @@ rule merge_bam:
 	input:
 		get_bam_merge
 	output:
-		temp("results/aligned_reads/merged/{sample_group}.bam")
+		temp("results/aligned_reads/merged/{sample_group}_{frag_size}.bam")
 	params:
 		"" # optional additional parameters as string
 	threads:  # Samtools takes additional threads through its option -@
@@ -26,11 +28,11 @@ rule merge_bam:
 
 rule samtools_index_merged:
     input:
-        "results/aligned_reads/merged/{sample}.bam"
+        "results/aligned_reads/merged/{sample}_{frag_size}.bam"
     output:
-        temp("results/aligned_reads/merged/{sample}.bam.bai")
+        temp("results/aligned_reads/merged/{sample}_{frag_size}.bam.bai")
     log:
-        "logs/samtools_index/{sample}.log"
+        "logs/samtools_index/{sample}_{frag_size}.log"
     params:
         "" # optional params string
     threads:  # Samtools takes additional threads through its option -@
@@ -40,10 +42,10 @@ rule samtools_index_merged:
         
 rule make_bigwigs_merged:
 	input:
-		bam = "results/aligned_reads/merged/{sample}.bam",
-		bai = "results/aligned_reads/merged/{sample}.bam.bai"
+		bam = "results/aligned_reads/merged/{sample}_{frag_size}.bam",
+		bai = "results/aligned_reads/merged/{sample}_{frag_size}.bam.bai"
 	output:
-		temp("results/bigwigs/coverage/merged/{sample}.bw")
+		temp("results/bigwigs/coverage/merged/{sample}_{frag_size}.bw")
 	conda:
 		"../envs/deeptools.yaml"
 	params:
@@ -55,9 +57,9 @@ rule make_bigwigs_merged:
 
 rule zscore_normalize_ind_bigwigs:
 	input:
-		"results/bigwigs/coverage/individual/{sample}.bw"
+		"results/bigwigs/coverage/individual/{sample}_{frag_size}.bw"
 	output:
-		"results/bigwigs/zscore_normalized/individual/{sample}.bw"
+		"results/bigwigs/zscore_normalized/individual/{sample}_{frag_size}.bw"
 	conda:
 		"../envs/zscore_normalize_bw.yaml"
 	script:
@@ -65,45 +67,10 @@ rule zscore_normalize_ind_bigwigs:
 
 rule zscore_normalize_merged_bigwigs:
 	input:
-		"results/bigwigs/coverage/merged/{sample}.bw"
+		"results/bigwigs/coverage/merged/{sample}_{frag_size}.bw"
 	output:
-		"results/bigwigs/zscore_normalized/merged/{sample}.bw"
+		"results/bigwigs/zscore_normalized/merged/{sample}_{frag_size}.bw"
 	conda:
 		"../envs/zscore_normalize_bw.yaml"
 	script:
 		"../scripts/zscore_normalize_bw.R"
-
-
-rule compute_scaling_factors:
-	input:
-		mapping_stats=get_scaling_input
-	output:
-		"results/scaling_factors/individual_scaling_factors.tsv",
-		"results/scaling_factors/merged_scaling_factors.tsv"
-	conda:
-		"../envs/zscore_normalize_bw.yaml"
-	script:
-		"../scripts/compute_scaling_factors.R"
-
-
-rule spikeIn_normalize_ind_bigwigs:
-	input:
-		bw=get_ind_spikeIn_input,
-		scaling_factors="results/scaling_factors/individual_scaling_factors.tsv"
-	output:
-		"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
-	conda:
-		"../envs/zscore_normalize_bw.yaml"
-	script:
-		"../scripts/spikeIn_normalize_bw.R"
-
-rule spikeIn_normalize_merged_bigwigs:
-	input:
-		bw=get_merged_spikeIn_input,
-		scaling_factors="results/scaling_factors/merged_scaling_factors.tsv"
-	output:
-		"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
-	conda:
-		"../envs/zscore_normalize_bw.yaml"
-	script:
-		"../scripts/spikeIn_normalize_bw.R"

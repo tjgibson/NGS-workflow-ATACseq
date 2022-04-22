@@ -2,12 +2,12 @@ import pandas as pd
 
 
 
-# # read in table with sample metadata
-# samples = (
-#     pd.read_csv(config["samples"], sep="\t", dtype={"sample_name": str})
-#     .set_index("sample_name", drop=False)
-#     .sort_index()
-# )
+# read in table with sample metadata
+samples = (
+    pd.read_csv(config["samples"], sep="\t", dtype={"sample_name": str})
+    .set_index("sample_name", drop=False)
+    .sort_index()
+)
 
 units = (
     pd.read_csv(config["units"], sep="\t", dtype={"sample_name": str, "unit_name": str})
@@ -56,65 +56,24 @@ def get_bam_merge(wildcards):
 	unit =  units[units["sample_group"] == wildcards.sample_group]
 	group = pd.unique(unit["sample_name"])
 	return expand(
-		"results/aligned_reads/filtered/{group}.bam", group=group)
+		"results/aligned_reads/split_fragments/{group}_{frag_size}.bam", group=group, frag_size = wildcards.frag_size)
 
 
-def get_macs2_input_narrow_pe(wildcards):
-	unit = units.loc[wildcards.sample]
-	if all(unit["call_peaks"]):
-		if all(unit["read_format"] == "PE"):
-			if all(unit["peak_type"] == "narrow"):
-				if all(pd.isna(unit["input"])):
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam"}
-				else:
-					return {"treatment": "results/aligned_reads/filtered/{sample}.bam", "control": "results/aligned_reads/filtered/{input}.bam".format(input=unit.iloc[0].input)}
-
-
-def get_scaling_input(wildcards):
-	stat_files = expand(
-				["results/aligned_reads/stats/{sample}_unireads.idxstats"],
-				sample = units["sample_name"]
-			)
-	return stat_files
-
-def get_ind_spikeIn_input(wildcards):
-	unit=units.loc[wildcards.sample]
-	if all(unit["call_peaks"]):
-		return "results/bigwigs/zscore_normalized/individual/{sample}.bw".format(sample = wildcards.sample)
-
-def get_merged_spikeIn_input(wildcards):
-	unit =  units[units["sample_group"] == wildcards.sample]
-	if all(unit["call_peaks"]):
-		return "results/bigwigs/zscore_normalized/merged/{sample}.bw".format(sample = wildcards.sample)
+def get_macs2_merged_input(wildcards):
+	sample =  samples[samples["experiment"] == wildcards.experiment]
+	in_samples = pd.unique(sample["sample_name"])
+	return expand(
+		"results/aligned_reads/split_fragments/{sample}_small.bam", sample=in_samples)
 
 
 def get_final_output():
-	final_output = []
-
-	# coverage bigwigs for individual replicates
+	final_output = []	
+	# z-score normalized bigwigs for individual replicates
 	final_output.extend(expand(
 					[
-						"results/bigwigs/coverage/individual/{sample}.bw"
+						"results/bigwigs/zscore_normalized/individual/{sample}_{frag_size}.bw"
 					],
-					sample = units["sample_name"]
-				)
-			)
-
-	# coverage bigwigs for merged replicates
-	final_output.extend(expand(
-					[
-						"results/bigwigs/coverage/merged/{sample}.bw"
-					],
-					sample = units["sample_group"]
-				)
-			)
-	
-		# z-score normalized bigwigs for individual replicates
-	final_output.extend(expand(
-					[
-						"results/bigwigs/zscore_normalized/individual/{sample}.bw"
-					],
-					sample = units["sample_name"]
+					sample = units["sample_name"], frag_size = ["small","large","total"]
 				)
 			)
 
@@ -122,76 +81,34 @@ def get_final_output():
 	# z-score normalized bigwigs for merged replicates
 	final_output.extend(expand(
 					[
-						"results/bigwigs/zscore_normalized/merged/{sample}.bw"
+						"results/bigwigs/zscore_normalized/merged/{sample}_{frag_size}.bw"
 					],
-					sample = units["sample_group"]
+					sample = units["sample_group"], frag_size = ["small","large","total"]
 				)
 			)
 
-	if config["use_spikeIn"]:
-		# spikeIn-normalized bigwigs for individual replicates
-		final_output.extend(expand(
-						[
-							"results/bigwigs/spikeIn_normalized/individual/{sample}.bw"
-						],
-						sample = units.loc[units["call_peaks"],"sample_name"]
-					)
-				)
-
-		# spikeIn-normalized bigwigs for merged replicates
-		final_output.extend(expand(
-						[
-							"results/bigwigs/spikeIn_normalized/merged/{sample}.bw"
-						],
-						sample = units.loc[units["call_peaks"],"sample_group"]
-					)
-				)
 
 
 
-	# add narrow peak output
-# 	if any( (units["call_peaks"]) & (units["peak_type"] == "narrow") & (units["read_format"] == "SE")):
-# 		out_samples =  units[(units["call_peaks"]) & (units["peak_type"] == "narrow") & (units["read_format"] == "SE")]
-# 		final_output.extend(expand(
-# 				[
-# 					"results/narrow_peaks/se/{sample}{ext}"
-# 				],
-# 				sample = out_samples["sample_name"],
-# 				ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
-# 			)
-# 		)
-# 
-# 	if any( (units["call_peaks"]) & (units["peak_type"] == "narrow") & (units["read_format"] == "PE")):
-# 		out_samples =  units[(units["call_peaks"]) & (units["peak_type"] == "narrow") & (units["read_format"] == "PE")]
-# 		final_output.extend(expand(
-# 				[
-# 					"results/narrow_peaks/pe/{sample}{ext}"
-# 				],
-# 				sample = out_samples["sample_name"],
-# 				ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
-# 			)
-# 		)
-# 
-# 	if any( (units["call_peaks"]) & (units["peak_type"] == "broad") & (units["read_format"] == "SE")):
-# 		out_samples =  units[(units["call_peaks"]) & (units["peak_type"] == "broad") & (units["read_format"] == "SE")]
-# 		final_output.extend(expand(
-# 				[
-# 					"results/broad_peaks/se/{sample}{ext}"
-# 				],
-# 				sample = out_samples["sample_name"],
-# 				ext = ["_peaks.xls", "_peaks.broadPeak","_peaks.gappedPeak"]
-# 			)
-# 		)
-# 
-# 	if any( (units["call_peaks"]) & (units["peak_type"] == "broad") & (units["read_format"] == "PE")):
-# 		out_samples =  units[(units["call_peaks"]) & (units["peak_type"] == "broad") & (units["read_format"] == "PE")]
-# 		final_output.extend(expand(
-# 				[
-# 					"results/broad_peaks/pe/{sample}{ext}"
-# 				],
-# 				sample = out_samples["sample_name"],
-# 				ext = ["_peaks.xls", "_peaks.broadPeak","_peaks.gappedPeak"]
-# 			)
-# 		)
+
+	# add indvidual peak output
+	final_output.extend(expand(
+				[
+					"results/peaks/individual/{sample}{ext}"
+				],
+				sample = pd.unique(units["sample_name"]),
+				ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
+			)
+		)
+
+	# add merged peak output
+	final_output.extend(expand(
+				[
+					"results/peaks/merged/{experiment}{ext}"
+				],
+				experiment = pd.unique(samples["experiment"]),
+				ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
+			)
+		)
 
 	return final_output

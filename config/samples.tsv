@@ -1,0 +1,5 @@
+sample_name	condition	experiment
+sfGFP-GAF-N_control_rep1	control	GAF_ATACseq
+sfGFP-GAF-N_control_rep2	control	GAF_ATACseq
+sfGFP-GAF-N_degradFP_rep1	degrad	GAF_ATACseq
+sfGFP-GAF-N_degradFP_rep2	degrad	GAF_ATACseq
