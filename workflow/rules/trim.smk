@@ -9,6 +9,7 @@ rule trim_reads:
 	conda:
 		"../envs/NGmerge.yaml"
 	params:
-		extra=""
+		extra="",
+		prefix= lambda wildcards, output: output[0].split('.')[0],
 	shell:
-		"NGmerge -a -e 20 -u 41 -n 8 -v -1 {input[0]} -2 {input[1]} -o data/trimmed/{wildcards.sample} 2> {log}"
+		"NGmerge -a -e 20 -u 41 -n 8 -v -1 {input[0]} -2 {input[1]} -o {params.prefix}  2> {log}"
