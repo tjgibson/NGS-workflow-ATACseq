@@ -46,7 +46,7 @@ def get_NGmerge_input(wildcards):
 			accession = unit["sra"]
 			if all(unit["read_format"] == "PE"):
 				return expand("data/sra/pe/{accession}_{read}.fastq.gz", accession=accession, read=[1,2])
-		fastqs = units.loc[(wildcards.sample), ["fq1", "fq2"]]
+		fastqs = units.loc[(wildcards.sample, wildcards.sample), ["fq1", "fq2"]]
 		if len(fastqs) == 2:
 			return [fastqs.fq1, fastqs.fq2]
 	unit = units.loc[wildcards.sample]
