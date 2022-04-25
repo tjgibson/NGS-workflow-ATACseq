@@ -10,6 +10,6 @@ rule trim_reads:
 		"../envs/NGmerge.yaml"
 	params:
 		extra="",
-		prefix= lambda wildcards, output: output[0].split('.')[0],
+		prefix= lambda wildcards, output: output[0].rstrip('.fastq.gz')[0:-2],
 	shell:
 		"NGmerge -a -e 20 -u 41 -n 8 -v -1 {input[0]} -2 {input[1]} -o {params.prefix}  2> {log}"
