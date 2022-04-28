@@ -9,7 +9,7 @@ rule total_fragments:
 		"logs/split_fragments/{sample}_total.log"
 	shell:
 		"""
-		mv {input[0]} {output[1]} 2> {log}
+		mv {input[0]} {output[0]} 2> {log}
 		mv {input[1]} {output[1]} 2>> {log}
 		"""
 		
