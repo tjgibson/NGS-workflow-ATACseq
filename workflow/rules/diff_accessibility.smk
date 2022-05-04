@@ -1,7 +1,7 @@
 rule feature_counts:
 	input:
 		samples=get_featurecounts_input,  # list of sam or bam files
-		annotation="resources/annotation.gff.gz",
+		annotation="results/peaks/final/{experiment}.saf",
 
 	output:
 		multiext(
@@ -12,13 +12,13 @@ rule feature_counts:
 	threads: 2
 	params:
 		r_path="",  # implicitly sets the --Rpath flag
-		extra="",
+		extra="-O -f -F 'SAF'",
 	log:
 		"logs/feature_counts/{experiment}.log",
 	wrapper:
 		"v1.3.2/bio/subread/featurecounts"
 
-if config["run_diff_exp"]:
+if config["run_diff_accessibility"]:
 	rule DEseq2:
 		input:
 			"results/count_tables/{experiment}.featureCounts"
@@ -26,8 +26,8 @@ if config["run_diff_exp"]:
 			"results/DEseq2/{experiment}.dds"
 		params:
 			samples=config["samples"],
-			model=config["diff_exp"]["model"],
-			count_threshold=config["diff_exp"]["count_threshold"],
+			model=config["diff_accessibility"]["model"],
+			count_threshold=config["diff_accessibility"]["count_threshold"],
 		conda:
 			"../envs/DEseq2.yaml",
 		log:
@@ -38,13 +38,13 @@ if config["run_diff_exp"]:
 	rule DEseq2_results:
 		input:
 			dds="results/DEseq2/{experiment}.dds",
-			annotation=rules.get_genome_annotation.output
+			peaks="results/peaks/final/{experiment}.narrowPeak"
 		output:
 			"results/DEseq2/{experiment}_{contrast}_results.tsv"
 		params:
 			 contrast=get_contrast,
-			 padj_cutoff=config["diff_exp"]["padj_cutoff"],
-			 FC_cutoff=config["diff_exp"]["log2FC_cutoff"],
+			 padj_cutoff=config["diff_accessibility"]["padj_cutoff"],
+			 FC_cutoff=config["diff_accessibility"]["log2FC_cutoff"],
 		conda:
 			"../envs/DEseq2.yaml",
 		log:

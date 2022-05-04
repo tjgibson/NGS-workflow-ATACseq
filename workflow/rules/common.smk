@@ -65,6 +65,15 @@ def get_macs2_merged_input(wildcards):
 	return expand(
 		"results/aligned_reads/split_fragments/{sample}_small.bam", sample=in_samples)
 
+def get_featurecounts_input(wildcards):
+	sample =  samples[samples["experiment"] == wildcards.experiment]
+	in_samples = pd.unique(sample["sample_name"])
+	return expand(
+		"results/aligned_reads/split_fragments/{sample}_small.bam", sample=in_samples)
+
+def get_contrast(wildcards):
+	return config["diff_accessibility"]["experiments"][wildcards.experiment]["contrasts"][wildcards.contrast]
+
 
 def get_final_output():
 	final_output = []	
@@ -110,5 +119,24 @@ def get_final_output():
 				ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
 			)
 		)
+	# count_tables
+	final_output.extend(expand(
+							[
+								"results/count_tables/{experiment}.featureCounts"
+							],
+							experiment = pd.unique(samples["experiment"])
+						)
+					)
+	# DEseq results
+	if config["run_diff_accessibility"]:
+		experiments = pd.unique(samples["experiment"])
+		for e in experiments:
+			final_output.extend(expand(
+							[
+								"results/DEseq2/{experiment}_{contrast}_results.tsv"
+							],
+							experiment = e, contrast = config["diff_accessibility"]["experiments"][e]["contrasts"]
+						)
+					)
 
 	return final_output

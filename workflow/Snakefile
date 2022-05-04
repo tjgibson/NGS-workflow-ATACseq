@@ -27,6 +27,7 @@ include: "rules/filter.smk"
 include: "rules/split_fragments.smk"
 include: "rules/bigwigs.smk"
 include: "rules/call_peaks.smk"
+include: "rules/diff_accessibility.smk"
 
 ##### target rules #####
 rule all:

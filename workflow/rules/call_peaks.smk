@@ -29,3 +29,17 @@ rule macs2_call_atac_peaks_merged:
 	params: config["params"]["macs2_call_atac_peaks_merged"]
 	wrapper:
 		"v1.1.0/bio/macs2/callpeak"
+
+rule extend_peak_summits:
+	input:
+		"results/peaks/merged/{experiment}_peaks.narrowPeak"
+	output:
+		"results/peaks/final/{experiment}.bed",
+		"results/peaks/final/{experiment}.narrowPeak",
+		"results/peaks/final/{experiment}.saf"
+	conda:
+		"../envs/zscore_normalize_bw.yaml"
+	params:
+		extend_width=201
+	script:
+		"../scripts/extend_peak_summits.R"
