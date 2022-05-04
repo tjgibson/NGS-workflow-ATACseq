@@ -65,6 +65,12 @@ def get_macs2_merged_input(wildcards):
 	return expand(
 		"results/aligned_reads/split_fragments/{sample}_small.bam", sample=in_samples)
 
+def get_macs2_merged_input_by_sample(wildcards):
+	unit =  units[units["sample_group"] == wildcards.sample_group]
+	sample_names = pd.unique(unit["sample_name"])
+	return expand("results/aligned_reads/split_fragments/{sample}_small.bam",sample=sample_names)
+
+
 def get_featurecounts_input(wildcards):
 	sample =  samples[samples["experiment"] == wildcards.experiment]
 	in_samples = pd.unique(sample["sample_name"])
@@ -113,12 +119,21 @@ def get_final_output():
 	# add merged peak output
 	final_output.extend(expand(
 				[
-					"results/peaks/merged/{experiment}{ext}"
+					"results/peaks/merged_all/{experiment}{ext}"
 				],
 				experiment = pd.unique(samples["experiment"]),
 				ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
 			)
 		)
+	
+	final_output.extend(expand(
+			[
+				"results/peaks/merged_by_sample/{sample_group}{ext}"
+			],
+			sample_group = pd.unique(units["sample_group"]),
+			ext = ["_peaks.xls", "_peaks.narrowPeak","_summits.bed"]
+		)
+	)
 	# count_tables
 	final_output.extend(expand(
 							[
