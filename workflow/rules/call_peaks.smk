@@ -49,7 +49,7 @@ rule macs2_call_atac_peaks_merged_by_sample:
 
 rule extend_peak_summits:
 	input:
-		"results/peaks/merged/{experiment}_peaks.narrowPeak"
+		"results/peaks/merged_all/{experiment}_peaks.narrowPeak"
 	output:
 		"results/peaks/final/{experiment}.bed",
 		"results/peaks/final/{experiment}.narrowPeak",
