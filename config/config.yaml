@@ -22,7 +22,7 @@ use_spikeIn: False
 
 # DESeq2 options -------------------------------------------------------------------------
 run_diff_accessibility: TRUE
-diff_exp:
+diff_accessibility:
   experiments:
     GAF_ATACseq:
       # contrasts for the deseq2 results method
