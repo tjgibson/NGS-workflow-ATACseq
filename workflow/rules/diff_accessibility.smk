@@ -12,7 +12,7 @@ rule feature_counts:
 	threads: 2
 	params:
 		r_path="",  # implicitly sets the --Rpath flag
-		extra="-O -f -F 'SAF'",
+		extra="-O -f -F 'SAF' -p",
 	log:
 		"logs/feature_counts/{experiment}.log",
 	wrapper:
