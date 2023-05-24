@@ -23,9 +23,9 @@ use_spikeIn: False
 # DESeq2 options -------------------------------------------------------------------------
 run_diff_accessibility: TRUE
 diff_accessibility:
-  experiments:
+  experiments: # each entry here should match the entries in the experiment column of samples.tsv
     GAF_ATACseq:
-      # contrasts for the deseq2 results method
+      # contrasts for the deseq2 results method. These should match the entries in the condition column of samples.tsv
       contrasts:
         degrad-vs-control:
           - degrad
