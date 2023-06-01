@@ -6,13 +6,14 @@ This workflow performs the following steps:
 
 1.  Optional: Retrieval of publically available sequencing data from NCBI GEO/SRA.
 2.  Optional: merge reads from the same sample that were sequenced on separate lanes or sequencing runs.
-3.  Align raw reads to a reference genome. The workflow will automatically retrieve any publically available reference genome and build the bowtie2 index.
-4.  Filter aligned reads based on alignment quality and discard multi-mapping reads. The filtering parameters can be customized.
-5.  Optional: filter aligned reads to discard reads aligning to contigs or mitochondrial genome. This filtering can also be customized.
-6.  Separate aligned reads based on fragment size. Small fragments (\< 100bp) are considered to be derived from accessible regions and used for downstream peak calling.
-7.  Optional: Perform peak calling using MACS2 on fragments \< 100bp.
-8.  Generate bigWig files containing z-score normalized read depth to allow data visualization in the genome browser.
-9.  Optional: Use DESeq2 to perform differential accessibility analysis.
+3.  Trim adapters from raw reads. I do this using [NGMerge](https://doi.org/10.1186/s12859-018-2579-2) which overlaps the two paired reads and removes overhanging sequence. This conveniently eliminates the need to provide specific adapter sequences.
+4.  Align raw reads to a reference genome. The workflow will automatically retrieve any publically available reference genome and build the bowtie2 index.
+5.  Filter aligned reads based on alignment quality and discard multi-mapping reads. The filtering parameters can be customized.
+6.  Optional: filter aligned reads to discard reads aligning to contigs or mitochondrial genome. This filtering can also be customized.
+7.  Separate aligned reads based on fragment size. Small fragments (\< 100bp) are considered to be derived from accessible regions and used for downstream peak calling.
+8.  Optional: Perform peak calling using MACS2 on fragments \< 100bp.
+9.  Generate bigWig files containing z-score normalized read depth to allow data visualization in the genome browser.
+10. Optional: Use DESeq2 to perform differential accessibility analysis.
 
 # Running the workflow
 
