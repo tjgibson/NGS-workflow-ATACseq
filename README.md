@@ -39,6 +39,12 @@ conda create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy
 
 ## Step 2: Deploy the workflow
 
+Activate the conda environment:
+
+```
+conda activate snakemake
+```
+
 Create a new directory for your analysis and enter it:
 
 ```         
